@@ -25,3 +25,5 @@ class DevicePermissions(ResourcePermission):
     update_perms = AllowAny()
     list_perms = AllowAny()
     partial_update_perms = AllowAny()
+    location_devices_perms=UserPerm()
+

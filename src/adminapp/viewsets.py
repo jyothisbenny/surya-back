@@ -46,8 +46,7 @@ class LocationViewSet(ModelViewSet):
 
     @action(methods=['GET'], detail=False, pagination_class=StandardResultsSetPagination)
     def user_locations(self, request):
-        queryset = Location.objects.filter(user__id=request.user.pk)
-        print("--------------", queryset)
+        queryset = Location.objects.filter(user__id=request.user.pk, is_active=True)
         page = self.paginate_queryset(queryset)
         if page is not None:
             return self.get_paginated_response(LocationSerializer(page, many=True).data)
@@ -70,3 +69,12 @@ class DeviceViewSet(ModelViewSet):
         self.filterset_class = DeviceFilter
         queryset = self.filter_queryset(queryset)
         return queryset
+
+    @action(methods=['POST'], detail=False, pagination_class=StandardResultsSetPagination)
+    def location_devices(self, request):
+        print("-------", request.data)
+        queryset = Device.objects.filter(location=request.data['location'], is_active=True)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            return self.get_paginated_response(DeviceSerializer(page, many=True).data)
+        return response.Ok(DeviceSerializer(queryset, many=True).data)

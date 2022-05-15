@@ -1,45 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e444002e-0434-404f-ad6f-bd971a15d4bf" name="Changes" comment="initial commit">
-      <change afterPath="$PROJECT_DIR$/src/accounts/filters.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/accounts/managers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/accounts/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/accounts/migrations/0002_user_is_active_user_is_separated_user_is_staff.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/accounts/migrations/0003_user_is_superuser.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/accounts/permissions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/accounts/serializers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/accounts/services.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/accounts/viewsets.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/adminapp/filters.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/adminapp/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/adminapp/migrations/0002_alter_device_is_active_alter_location_is_active.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/adminapp/migrations/0003_location_user.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/adminapp/migrations/0004_location_address_location_pincode.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/adminapp/migrations/0005_remove_location_user_device_is_suspended_device_user.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/adminapp/permissions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/adminapp/serializers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/adminapp/viewsets.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/base/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/base/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/base/api/generics.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/base/api/pagination.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/base/api/permissions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/base/api/views.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/base/api/viewsets.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/base/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/base/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/base/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/base/response.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/base/serializers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/routers.py" afterDir="false" />
+    <list default="true" id="e444002e-0434-404f-ad6f-bd971a15d4bf" name="Changes" comment="added all the API's for device, location, and user">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounts/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/accounts/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounts/tests.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounts/views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/adminapp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/adminapp/permissions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/permissions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/adminapp/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/viewsets.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,7 +79,14 @@
       <option name="project" value="LOCAL" />
       <updated>1650020206456</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="added all the API's for device, location, and user">
+      <created>1652634615776</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1652634615776</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -130,6 +102,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="initial commit" />
+    <MESSAGE value="added all the API's for device, location, and user" />
+    <option name="LAST_COMMIT_MESSAGE" value="added all the API's for device, location, and user" />
   </component>
 </project>
