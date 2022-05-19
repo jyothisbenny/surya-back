@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e444002e-0434-404f-ad6f-bd971a15d4bf" name="Changes" comment="added location_devices api">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounts/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/accounts/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/adminapp/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/viewsets.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/base/api/pagination.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/base/api/pagination.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -94,7 +93,21 @@
       <option name="project" value="LOCAL" />
       <updated>1652641097254</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="added location_devices api">
+      <created>1652735463494</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1652735463494</updated>
+    </task>
+    <task id="LOCAL-00007" summary="added location_devices api">
+      <created>1652735473648</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1652735473648</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
