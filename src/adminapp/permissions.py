@@ -6,7 +6,7 @@ class LocationPermissions(ResourcePermission):
     enough_perms = None
     global_perms = None
     retrieve_perms = UserPerm()
-    create_perms = AllowAny()
+    create_perms = AdminPerm()
     update_perms = AllowAny()
     create_with_base64_perms = AllowAny()
     multiple_perms = AllowAny()
@@ -27,3 +27,14 @@ class DevicePermissions(ResourcePermission):
     partial_update_perms = AllowAny()
     location_devices_perms=UserPerm()
 
+
+class InverterDataPermissions(ResourcePermission):
+    metadata_perms = AllowAny()
+    enough_perms = None
+    global_perms = None
+    destroy_perms = AdminPerm()
+    retrieve_perms = AdminPerm()
+    create_perms = AllowAny()
+    update_perms = AdminPerm()
+    list_perms = AdminPerm()
+    partial_update_perms = AdminPerm()

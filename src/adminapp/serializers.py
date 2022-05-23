@@ -1,12 +1,14 @@
+import json
 from rest_framework import serializers
 
 from ..accounts.serializers import UserSerializer
-from .models import Location, Device
+from .models import Location, Device, InverterData, InverterJsonData
 from ..base.serializers import ModelSerializer
 
 
 class LocationSerializer(ModelSerializer):
     user_data = serializers.SerializerMethodField(required=False)
+
     class Meta:
         model = Location
         fields = '__all__'
@@ -35,3 +37,40 @@ class DeviceSerializer(ModelSerializer):
     def get_location_data(obj):
         return LocationSerializer(obj.location).data if obj.location else None
 
+
+class InverterDataSerializer(ModelSerializer):
+    class Meta:
+        model = InverterData
+        fields = '__all__'
+
+    """default value=0000"""
+    def create(self, validated_data):
+        data = validated_data.pop("data", None)
+        inverter_json_data = InverterJsonData.objects.create(data=data)
+        imei = data['data']['imei']
+        uid = data['data']['uid']
+        sid = data['data']['modbus'][0]['sid']
+        rcnt = data['data']['modbus'][0]['rcnt']
+        reg4 = dict(data['data']['modbus'][0]).get('reg4', '0000')
+        daily_energy = int(reg4, 16)
+        reg5 = dict(data['data']['modbus'][0]).get('reg5', '0000')
+        reg6 = dict(data['data']['modbus'][0]).get('reg6', '0000')
+        total_energy = int(reg5 + reg6, 16)
+        reg78 = dict(data['data']['modbus'][0]).get('reg78', '0000')
+        reg79 = dict(data['data']['modbus'][0]).get('reg79', '0000')
+        op_active_power = int(reg78 + reg79, 16)
+        specific_yields = int(reg5 + reg6, 16)
+        inverter_op_active_power = int(reg78 + reg79, 16)
+        inverter_daily_energy = int(reg4, 16)
+        inverter_total_energy = int(reg5 + reg6, 16)
+        reg84 = dict(data['data']['modbus'][0]).get('reg84', '0000')
+        reg85 = dict(data['data']['modbus'][0]).get('reg85', '0000')
+        meter_active_power = int(reg84 + reg85, 16)
+        instance = InverterData.objects.create(imei=imei, sid=sid, uid=uid, rcnt=rcnt, daily_energy=daily_energy,
+                                               total_energy=total_energy, op_active_power=op_active_power,
+                                               specific_yields=specific_yields,
+                                               inverter_op_active_power=inverter_op_active_power,
+                                               inverter_daily_energy=inverter_daily_energy,
+                                               inverter_total_energy=inverter_total_energy,
+                                               meter_active_power=meter_active_power)
+        return instance

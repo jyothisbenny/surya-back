@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e444002e-0434-404f-ad6f-bd971a15d4bf" name="Changes" comment="added location_devices api">
+    <list default="true" id="e444002e-0434-404f-ad6f-bd971a15d4bf" name="Changes" comment="filter added for location search">
+      <change afterPath="$PROJECT_DIR$/src/adminapp/services.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/adminapp/filters.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/filters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/adminapp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/adminapp/permissions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/permissions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/adminapp/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/adminapp/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/base/api/pagination.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/base/api/pagination.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/base/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/base/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routers.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/routers.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,7 +114,14 @@
       <option name="project" value="LOCAL" />
       <updated>1652735473648</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="filter added for location search">
+      <created>1652936827879</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1652936827879</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -125,6 +139,7 @@
     <MESSAGE value="initial commit" />
     <MESSAGE value="added all the API's for device, location, and user" />
     <MESSAGE value="added location_devices api" />
-    <option name="LAST_COMMIT_MESSAGE" value="added location_devices api" />
+    <MESSAGE value="filter added for location search" />
+    <option name="LAST_COMMIT_MESSAGE" value="filter added for location search" />
   </component>
 </project>

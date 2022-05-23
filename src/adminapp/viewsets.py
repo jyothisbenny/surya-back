@@ -1,10 +1,10 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
 
-from .models import Location, Device
-from .filters import LocationFilter, DeviceFilter
-from .serializers import LocationSerializer, DeviceSerializer
-from .permissions import LocationPermissions, DevicePermissions
+from .models import Location, Device, InverterData, InverterJsonData
+from .filters import LocationFilter, DeviceFilter, InverterDataFilter
+from .serializers import LocationSerializer, DeviceSerializer, InverterDataSerializer
+from .permissions import LocationPermissions, DevicePermissions, InverterDataPermissions
 from ..base import response
 from ..base.api.viewsets import ModelViewSet
 from ..base.api.pagination import StandardResultsSetPagination
@@ -81,3 +81,25 @@ class DeviceViewSet(ModelViewSet):
         if page is not None:
             return self.get_paginated_response(DeviceSerializer(page, many=True).data)
         return response.Ok(DeviceSerializer(queryset, many=True).data)
+
+
+class InverterDataViewSet(ModelViewSet):
+    """
+    Here we have user login, logout, endpoints.
+    """
+    queryset = InverterData.objects.all()
+    serializer_class = InverterDataSerializer
+    pagination_class = StandardResultsSetPagination
+    permission_classes = (InverterDataPermissions,)
+    filterset_class = None
+
+    def get_queryset(self):
+        queryset = super(InverterDataViewSet, self).get_queryset()
+        queryset = queryset.filter(is_active=True)
+        self.filterset_class = InverterDataFilter
+        queryset = self.filter_queryset(queryset)
+        return queryset
+
+    def perform_create(self, serializer):
+        data = self.request.data
+        serializer.save(data=data)
