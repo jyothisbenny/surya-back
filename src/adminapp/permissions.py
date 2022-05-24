@@ -36,5 +36,5 @@ class InverterDataPermissions(ResourcePermission):
     retrieve_perms = AdminPerm()
     create_perms = AllowAny()
     update_perms = AdminPerm()
-    list_perms = AdminPerm()
+    list_perms = AllowAny()
     partial_update_perms = AdminPerm()

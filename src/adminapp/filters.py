@@ -18,6 +18,7 @@ class DeviceFilter(django_filters.FilterSet):
         model = Device
         fields = {
             'id': ['exact'],
+            'imei': ['exact'],
             'device_name': ['exact', 'icontains'],
             'location': ['exact'],
         }

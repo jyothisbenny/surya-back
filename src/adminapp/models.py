@@ -19,6 +19,7 @@ class Location(TimeStampedModel):
 
 class Device(TimeStampedModel):
     device_name = models.CharField(max_length=128, blank=True, null=True, default='')
+    imei = models.CharField(max_length=128, blank=True, null=True, default='')
     location = models.ForeignKey(Location, blank=True, null=True, on_delete=models.PROTECT)
     is_suspended = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -29,9 +30,8 @@ class InverterJsonData(BaseModel):
     is_active = models.BooleanField(default=True)
 
 
-
-
 class InverterData(BaseModel):
+    device = models.ForeignKey(Device, blank=True, null=True, on_delete=models.PROTECT)
     imei = models.CharField(max_length=128, blank=True, null=True, default='')
     sid = models.CharField(max_length=128, blank=True, null=True, default='')
     uid = models.CharField(max_length=128, blank=True, null=True, default='')
