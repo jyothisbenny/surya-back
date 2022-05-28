@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import django_filters
 from .models import Location, Device, InverterData
 
@@ -9,7 +11,7 @@ class LocationFilter(django_filters.FilterSet):
             'id': ['exact'],
             'name': ['exact', 'icontains'],
             'latitude': ['exact', 'icontains'],
-            'longitude': ['exact', 'icontains'],
+            'longitude': ['exact', 'icontains']
         }
 
 
@@ -29,6 +31,7 @@ class InverterDataFilter(django_filters.FilterSet):
         model = InverterData
         fields = {
             'id': ['exact'],
+            'device': ['exact'],
             'sid': ['exact', 'icontains'],
             'uid': ['exact', 'icontains'],
             'imei': ['exact', 'icontains'],

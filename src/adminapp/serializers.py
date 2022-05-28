@@ -1,10 +1,16 @@
 from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework import status
+import datetime
+from django.db.models import Avg, Min, FloatField
+from django.db.models.functions import Cast
 
 from ..accounts.serializers import UserSerializer
 from .models import Location, Device, InverterData, InverterJsonData
 from ..base.serializers import ModelSerializer
+from ..base.utils import timezone
+
+now = timezone.now_local()
 
 
 class LocationSerializer(ModelSerializer):
@@ -35,14 +41,15 @@ class DeviceSerializer(ModelSerializer):
         fields = '__all__'
 
     def validate(self, attrs):
-        imei = attrs.get('imei')
-        if imei:
-            device = Device.objects.filter(imei=imei, is_active=True).first()
-            if device:
-                raise serializers.ValidationError({"detail": "This IMEI is used by another device!"})
-        else:
-            raise serializers.ValidationError({"detail": "Please provide device IMEI number!"})
-
+        is_active = attrs.get("is_active", True)
+        if is_active == True:
+            imei = attrs.get('imei')
+            if imei:
+                device = Device.objects.filter(imei=imei, is_active=True).first()
+                if device:
+                    raise serializers.ValidationError({"detail": "This IMEI is used by another device!"})
+            else:
+                raise serializers.ValidationError({"detail": "Please provide device IMEI number!"})
         return attrs
 
     @staticmethod
@@ -51,6 +58,8 @@ class DeviceSerializer(ModelSerializer):
 
 
 class InverterDataSerializer(ModelSerializer):
+    device_data = serializers.SerializerMethodField(required=False)
+
     class Meta:
         model = InverterData
         fields = '__all__'
@@ -98,3 +107,64 @@ class InverterDataSerializer(ModelSerializer):
                                     inverter_total_energy=inverter_total_energy,
                                     meter_active_power=meter_active_power)
         raise serializers.ValidationError({"detail": "Data stored successfully!"})
+
+    @staticmethod
+    def get_device_data(obj):
+        return DeviceSerializer(obj.device).data if obj.device else None
+
+
+class LocationSummarySerializer(serializers.ModelSerializer):
+    summary = serializers.SerializerMethodField(required=False)
+
+    class Meta:
+        model = Location
+        fields = '__all__'
+
+    def get_summary(self, obj):
+        inverter_data = InverterData.objects.filter(device__location=obj, created_at__date=self.context.get('date'))
+        print("-----___=-", inverter_data)
+        avg_data = inverter_data.aggregate(avg_de=Avg(Cast("daily_energy", FloatField())),
+                                           avg_te=Avg(Cast("total_energy", FloatField())),
+                                           avg_oap=Avg(Cast("op_active_power", FloatField())),
+                                           avg_sy=Avg(Cast('specific_yields', FloatField())))
+        pr, cuf, isolation = 0, 0, 0
+        irradiation = 250
+        isolation = irradiation * 24
+
+        if avg_data and avg_data['avg_sy']:
+            pr = (avg_data['avg_sy'] * 100) / 24
+            cuf = pr / 365 * 24 * 12
+        print(pr, cuf, irradiation, isolation)
+        return {"avg_data": avg_data, "pr": pr, "cuf": cuf, "irradiation": irradiation, "isolation": isolation}
+
+
+class DeviceSummarySerializer(serializers.ModelSerializer):
+    summary = serializers.SerializerMethodField(required=False)
+
+    class Meta:
+        model = Device
+        fields = '__all__'
+
+    def get_summary(self, obj):
+        print(obj.imei)
+        imei_last_record = None
+        status = None
+        if obj.imei:
+            imei_last_record = InverterData.objects.filter(imei=obj.imei).last()
+        if imei_last_record:
+            if imei_last_record.created_at + datetime.timedelta(minutes=5) > now:
+                status = "Online"
+            else:
+                status = "Offline"
+        else:
+            status = "Offline"
+
+        end_date = datetime.datetime.strptime(self.context.get('end_date'), "%Y-%m-%d")
+        end_date = end_date + datetime.timedelta(days=10)
+        inverter_data = InverterData.objects.filter(device=obj, created_at__range=[self.context.get('start_date'),
+                                                                                   end_date], is_active=True)
+        avg_data = inverter_data.aggregate(avg_de=Avg(Cast("daily_energy", FloatField())),
+                                           avg_te=Avg(Cast("total_energy", FloatField())),
+                                           uid=Min(Cast("uid", FloatField()))
+                                           )
+        return {"avg_data": avg_data, "status": status}

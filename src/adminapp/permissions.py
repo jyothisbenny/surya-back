@@ -25,7 +25,7 @@ class DevicePermissions(ResourcePermission):
     update_perms = AllowAny()
     list_perms = AllowAny()
     partial_update_perms = AllowAny()
-    location_devices_perms=UserPerm()
+    location_devices_perms = UserPerm()
 
 
 class InverterDataPermissions(ResourcePermission):
@@ -38,3 +38,5 @@ class InverterDataPermissions(ResourcePermission):
     update_perms = AdminPerm()
     list_perms = AllowAny()
     partial_update_perms = AdminPerm()
+    location_devices_perms = UserPerm()
+
