@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import django_filters
-from .models import Location, Device, InverterData
+from .models import Location, Device, InverterData, ZipReport
 
 
 class LocationFilter(django_filters.FilterSet):
@@ -44,4 +44,19 @@ class InverterDataFilter(django_filters.FilterSet):
             'inverter_daily_energy': ['exact', 'icontains'],
             'inverter_total_energy': ['exact', 'icontains'],
             'meter_active_power': ['exact', 'icontains'],
+        }
+
+
+class ZipReportFilter(django_filters.FilterSet):
+    class Meta:
+        model = ZipReport
+        fields = {
+            'id': ['exact'],
+            'name': ['exact', 'icontains'],
+            'from_date': ['exact'],
+            'to_date': ['exact'],
+            'frequency': ['exact', 'icontains'],
+            'category': ['exact', 'icontains'],
+            'status': ['exact', 'icontains'],
+            'location': ['exact',  'icontains'],
         }

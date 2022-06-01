@@ -3,6 +3,7 @@ import jsonfield
 
 from ..accounts.models import User
 from ..base.models import TimeStampedModel, BaseModel
+from ..base.validators.form_validations import file_extension_validator
 
 
 # Create your models here.
@@ -45,4 +46,18 @@ class InverterData(BaseModel):
     inverter_total_energy = models.CharField(max_length=128, blank=True, null=True, default='')
     meter_active_power = models.CharField(max_length=128, blank=True, null=True, default='')
     # meter_active_energy = models.CharField(max_length=128, blank=True, null=True, default='')
+    is_active = models.BooleanField(default=True)
+
+
+class ZipReport(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    name = models.CharField(max_length=128, blank=True, null=True, default='')
+    from_date = models.DateTimeField(blank=True, null=True)
+    to_date = models.DateTimeField(blank=True, null=True)
+    frequency = models.CharField(max_length=128, blank=True, null=True, default='')
+    category = models.CharField(max_length=128, blank=True, null=True, default='')
+    status = models.CharField(max_length=128, blank=True, null=True, default='')
+    zip_file = models.FileField(upload_to="reports/%Y/%m/%d", max_length=80, blank=True, null=True,
+                                validators=[file_extension_validator])
+    location = models.ManyToManyField(Location, blank=True, null=True)
     is_active = models.BooleanField(default=True)

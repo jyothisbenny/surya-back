@@ -12,7 +12,7 @@ class LocationPermissions(ResourcePermission):
     multiple_perms = AllowAny()
     location_list_perms = AllowAny()
     get_location_count_perms = AllowAny()
-    user_locations_perms=UserPerm()
+    user_locations_perms = UserPerm()
 
 
 class DevicePermissions(ResourcePermission):
@@ -40,3 +40,14 @@ class InverterDataPermissions(ResourcePermission):
     partial_update_perms = AdminPerm()
     location_devices_perms = UserPerm()
 
+
+class ZipReportPermissions(ResourcePermission):
+    metadata_perms = AllowAny()
+    enough_perms = None
+    global_perms = None
+    destroy_perms = AdminPerm() | UserPerm()
+    retrieve_perms = AdminPerm() | UserPerm()
+    create_perms = AdminPerm() | UserPerm()
+    update_perms = AdminPerm() | UserPerm()
+    list_perms = AllowAny() | UserPerm()
+    report_zip_perms = AllowAny()

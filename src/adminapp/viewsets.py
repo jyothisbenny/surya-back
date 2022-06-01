@@ -1,14 +1,17 @@
+import shutil
+from django.http import HttpResponse
+from django.conf import settings
 from rest_framework import viewsets
 from datetime import datetime
 from rest_framework.decorators import action
 from django.db.models import Avg, IntegerField, FloatField
 from django.db.models.functions import Cast
 
-from .models import Location, Device, InverterData, InverterJsonData
-from .filters import LocationFilter, DeviceFilter, InverterDataFilter
+from .models import Location, Device, InverterData, InverterJsonData, ZipReport
+from .filters import LocationFilter, DeviceFilter, InverterDataFilter, ZipReportFilter
 from .serializers import LocationSerializer, DeviceSerializer, InverterDataSerializer, LocationSummarySerializer, \
-    DeviceSummarySerializer
-from .permissions import LocationPermissions, DevicePermissions, InverterDataPermissions
+    DeviceSummarySerializer, ZipReportSerializer, FileSerializer
+from .permissions import LocationPermissions, DevicePermissions, InverterDataPermissions, ZipReportPermissions
 from ..base import response
 from ..base.api.viewsets import ModelViewSet
 from ..base.api.pagination import StandardResultsSetPagination
@@ -88,7 +91,7 @@ class DeviceViewSet(ModelViewSet):
         print("-----------------", request.query_params.get('start_date'))
         start_date = request.query_params.get('start_date', str(datetime.now().strftime(("%Y-%m-%d"))))
         end_date = request.query_params.get('end_date', str(datetime.now().strftime(("%Y-%m-%d"))))
-        print(str(datetime.now().strftime(("%Y-%m-%d"))),  str(datetime.now().strftime(("%Y-%m-%d"))))
+        print(str(datetime.now().strftime(("%Y-%m-%d"))), str(datetime.now().strftime(("%Y-%m-%d"))))
         queryset = Device.objects.filter(location=request.query_params.get('location', 0), is_active=True)
         self.filterset_class = DeviceFilter
         queryset = self.filter_queryset(queryset)
@@ -134,3 +137,38 @@ class InverterDataViewSet(ModelViewSet):
         if page is not None:
             return self.get_paginated_response(InverterDataSerializer(page, many=True, context={"date": date}).data)
         return response.Ok(InverterDataSerializer(queryset, many=True, context={"date": date}).data)
+
+
+class ZipReportViewSet(ModelViewSet):
+    """
+    Here we have user login, logout, endpoints.
+    """
+    queryset = ZipReport.objects.filter(is_active=True)
+    serializer_class = ZipReportSerializer
+    pagination_class = StandardResultsSetPagination
+    permission_classes = (ZipReportPermissions,)
+    filterset_class = None
+
+    def get_queryset(self):
+        queryset = super(ZipReportViewSet, self).get_queryset()
+        queryset = queryset.filter(user=self.request.user.pk, is_active=True).order_by('-id')
+        self.filterset_class = ZipReportFilter
+        queryset = self.filter_queryset(queryset)
+        return queryset
+
+    def perform_create(self, serializer):
+        data = self.request.data
+        user = self.request.user
+        serializer.save(user=user)
+
+    @action(methods=['GET'], detail=False)
+    def report_zip(self, request):
+        report_id = request.query_params.get('report_id', None)
+        queryset = ZipReport.objects.filter(pk=report_id).first()
+        archive_name = '{}/{}/{}'.format(settings.MEDIA_ROOT, str(queryset.id)+"-zip", queryset.name)
+        directory_name = '{}/{}/'.format(settings.MEDIA_ROOT, str(queryset.id))
+        shutil.make_archive(archive_name, 'zip', directory_name)
+        # zip_file = open(settings.MEDIA_ROOT + "/" + str(queryset.id)+"-zip" + "/" + str(queryset.name)+".zip", 'rb')
+        # response = HttpResponse(zip_file, content_type='application/zip')
+        # response['Content-Disposition'] = 'attachment; filename=name.zip'
+        return response.Ok({"path": "/"+str(queryset.id)+"-zip" + "/" + str(queryset.name)+".zip"})
