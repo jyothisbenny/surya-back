@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e444002e-0434-404f-ad6f-bd971a15d4bf" name="Changes" comment="updated requirements">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/adminapp/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/serializers.py" afterDir="false" />
-    </list>
+    <list default="true" id="e444002e-0434-404f-ad6f-bd971a15d4bf" name="Changes" comment="updated xlsx errors" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -186,7 +183,14 @@
       <option name="project" value="LOCAL" />
       <updated>1654103657247</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="updated xlsx errors">
+      <created>1654161535968</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1654161535968</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -209,6 +213,7 @@
     <MESSAGE value="generated location data and device data" />
     <MESSAGE value="reports generated" />
     <MESSAGE value="updated requirements" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated requirements" />
+    <MESSAGE value="updated xlsx errors" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated xlsx errors" />
   </component>
 </project>

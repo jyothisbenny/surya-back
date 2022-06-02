@@ -250,15 +250,17 @@ class ZipReportSerializer(serializers.ModelSerializer):
 
                 for row in plant_summery_data:
                     ws1.append(row)
-                for row in plant_analysis_data:
-                    ws2.append(row)
+
                 ws2.append(
-                    ["Timestamp", "Daily Energy [ kWh ]", "Output Active Power [ kWp ]", "Specific Yield [ kWh/kWp ]",
-                     "CUF [ % ]", "Performance Ratio [ % ]", "Total Energy [ MWh ]", "Solar Insolation [ KWh/m2 ]",
-                     "Solar Irradiation [ W/m2 ]"])
+                        ["Timestamp", "Daily Energy [ kWh ]", "Output Active Power [ kWp ]",
+                         "Specific Yield [ kWh/kWp ]",
+                         "CUF [ % ]", "Performance Ratio [ % ]", "Total Energy [ MWh ]", "Solar Insolation [ KWh/m2 ]",
+                         "Solar Irradiation [ W/m2 ]"])
                 red_font = Font(bold=True, italic=True)
                 for cell in ws2["1:1"]:
                     cell.font = red_font
+                for row in plant_analysis_data:
+                    ws2.append(row)
                 Path(settings.MEDIA_ROOT + "/" + str(report_instance.id)).mkdir(parents=True, exist_ok=True)
                 wb.save('{}/{}/{}.xlsx'.format(settings.MEDIA_ROOT, str(report_instance.id), location.name))
                 report_instance.status = "Success"
