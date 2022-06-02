@@ -3,6 +3,8 @@ import datetime
 
 from pathlib import Path
 from openpyxl import Workbook
+from openpyxl.styles import Font
+
 from django.conf import settings
 from django.db.models import Avg, Min, FloatField
 from django.db.models.functions import Cast
@@ -209,6 +211,8 @@ class ZipReportSerializer(serializers.ModelSerializer):
                     cuf = pr / 365 * 24 * 12
 
                 wb = Workbook()
+                sheet = wb['Sheet']
+                wb.remove(sheet)
                 ws1 = wb.create_sheet("Plant Summery")
                 ws2 = wb.create_sheet("Plant Analysis")
                 # ws3 = wb.create_sheet("Grid Downtime Analysis")
@@ -218,6 +222,8 @@ class ZipReportSerializer(serializers.ModelSerializer):
 
                 plant_summery_data = [
                     ['Plant Name', location.name],
+                    ['Date', validated_data.get('from_date').replace(tzinfo=None),
+                     validated_data.get('to_date').replace(tzinfo=None)],
                     ['Description'],
                     ['Plant Capacity', "", "kWp"],
                     ['Plant Manager'],
@@ -238,13 +244,21 @@ class ZipReportSerializer(serializers.ModelSerializer):
                     inverter_pr = (int(inverter.specific_yields) * 100) / 24
                     inverter_cuf = int(inverter_pr) / 365 * 24 * 12
                     plant_analysis_data.append(
-                        [inverter.created_at.replace(tzinfo=None), inverter.daily_energy, inverter.op_active_power, inverter.specific_yields,
+                        [inverter.created_at.replace(tzinfo=None), inverter.daily_energy, inverter.op_active_power,
+                         inverter.specific_yields,
                          inverter_cuf, inverter_pr, inverter.total_energy, insolation, irradiation])
 
                 for row in plant_summery_data:
                     ws1.append(row)
                 for row in plant_analysis_data:
                     ws2.append(row)
+                ws2.append(
+                    ["Timestamp", "Daily Energy [ kWh ]", "Output Active Power [ kWp ]", "Specific Yield [ kWh/kWp ]",
+                     "CUF [ % ]", "Performance Ratio [ % ]", "Total Energy [ MWh ]", "Solar Insolation [ KWh/m2 ]",
+                     "Solar Irradiation [ W/m2 ]"])
+                red_font = Font(bold=True, italic=True)
+                for cell in ws2["1:1"]:
+                    cell.font = red_font
                 Path(settings.MEDIA_ROOT + "/" + str(report_instance.id)).mkdir(parents=True, exist_ok=True)
                 wb.save('{}/{}/{}.xlsx'.format(settings.MEDIA_ROOT, str(report_instance.id), location.name))
                 report_instance.status = "Success"
