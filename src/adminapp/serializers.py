@@ -6,8 +6,6 @@ from openpyxl import Workbook
 from openpyxl.styles import Font
 
 from django.conf import settings
-from django.db.models import Avg, Min, FloatField
-from django.db.models.functions import Cast
 from rest_framework import serializers
 
 from .models import Location, Device, InverterData, InverterJsonData, ZipReport
@@ -126,19 +124,29 @@ class LocationSummarySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_summary(self, obj):
-        inverter_data = InverterData.objects.filter(device__location=obj, created_at__date=self.context.get('date'))
-        avg_data = inverter_data.aggregate(avg_de=Avg(Cast("daily_energy", FloatField())),
-                                           avg_te=Avg(Cast("total_energy", FloatField())),
-                                           avg_oap=Avg(Cast("op_active_power", FloatField())),
-                                           avg_sy=Avg(Cast('specific_yields', FloatField())))
-        pr, cuf, isolation = 0, 0, 0
+        inverter_data = None
+        try:
+            inverter_data = InverterData.objects.filter(device__location=obj, created_at__date=self.context.get('date'),
+                                                        is_active=True).order_by('-id').first()
+        except:
+            pass
+        pr, cuf, insolation = 0, 0, 0
         irradiation = 250
-        isolation = irradiation * 24
-
-        if avg_data and avg_data['avg_sy']:
-            pr = (avg_data['avg_sy'] * 100) / 24
+        insolation = irradiation * 24
+        if inverter_data and inverter_data.specific_yields:
+            pr = (int(inverter_data.specific_yields) * 100) / 24
             cuf = pr / 365 * 24 * 12
-        return {"avg_data": avg_data, "pr": pr, "cuf": cuf, "irradiation": irradiation, "isolation": isolation}
+        if inverter_data:
+            context = {"total_energy": inverter_data.total_energy,
+                       "daily_energy": inverter_data.daily_energy,
+                       "op_active_power": inverter_data.op_active_power,
+                       "specific_yields": inverter_data.specific_yields,
+                       "pr": pr, "cuf": cuf, "irradiation": irradiation,
+                       "insolation": insolation
+                       }
+            return context
+        else:
+            return {"pr": pr, "cuf": cuf, "irradiation": irradiation, "insolation": insolation}
 
 
 class DeviceSummarySerializer(serializers.ModelSerializer):
@@ -160,16 +168,34 @@ class DeviceSummarySerializer(serializers.ModelSerializer):
                 status = "Offline"
         else:
             status = "Offline"
+        start_date = self.context.get('start_date')
+        end_date = self.context.get('end_date')
 
-        end_date = datetime.datetime.strptime(self.context.get('end_date'), "%Y-%m-%d")
-        end_date = end_date + datetime.timedelta(days=1)
-        inverter_data = InverterData.objects.filter(device=obj, created_at__range=[self.context.get('start_date'),
-                                                                                   end_date], is_active=True)
-        avg_data = inverter_data.aggregate(avg_de=Avg(Cast("daily_energy", FloatField())),
-                                           avg_te=Avg(Cast("total_energy", FloatField())),
-                                           uid=Min(Cast("uid", FloatField()))
-                                           )
-        return {"avg_data": avg_data, "status": status}
+        if start_date == end_date:
+            inverter_data = InverterData.objects.filter(device=obj, created_at__date=start_date,
+                                                        is_active=True).order_by('-id').first()
+            if inverter_data:
+                context = {"total_energy": inverter_data.total_energy,
+                           "daily_energy": inverter_data.daily_energy,
+                           "uid": inverter_data.op_active_power,
+                           "status": status}
+                return context
+
+        inverter_start_data = InverterData.objects.filter(device=obj, created_at__date=self.context.get('start_date'),
+                                                          is_active=True).order_by('-id').first()
+        inverter_end_data = InverterData.objects.filter(device=obj, created_at__date=end_date,
+                                                        is_active=True).order_by('-id').first()
+
+        if inverter_start_data and inverter_end_data:
+            context = {"total_energy": int(inverter_end_data.total_energy) - int(inverter_start_data.total_energy),
+                       "daily_energy": int(inverter_end_data.daily_energy) - int(inverter_start_data.daily_energy),
+                       "uid": int(inverter_end_data.op_active_power) - int(inverter_start_data.op_active_power),
+                       "status": status
+                       }
+            return context
+        else:
+            context = {"status": status}
+            return context
 
 
 class ZipReportSerializer(serializers.ModelSerializer):
@@ -192,22 +218,33 @@ class ZipReportSerializer(serializers.ModelSerializer):
         for location in location_list:
             try:
                 report_instance.location.add(location)
-                inverter_data = InverterData.objects.filter(device__location=location,
-                                                            created_at__date__lte=validated_data.get('to_date'),
-                                                            created_at__date__gte=validated_data.get('from_date'),
-                                                            is_active=True)
+                from_date = validated_data.get('from_date')
+                to_date = validated_data.get('to_date')
 
-                avg_data = inverter_data.aggregate(avg_de=Avg(Cast("daily_energy", FloatField())),
-                                                   avg_te=Avg(Cast("total_energy", FloatField())),
-                                                   avg_oap=Avg(Cast("op_active_power", FloatField())),
-                                                   avg_sy=Avg(Cast('specific_yields', FloatField())))
+                context = None
+                if from_date == to_date:
+                    # from_date = datetime.datetime.strptime(from_date, "%Y-%m-%d")
+                    from_date = from_date - datetime.timedelta(days=1)
+
+                start_data = InverterData.objects.filter(device__location=location,
+                                                         created_at__date=from_date,
+                                                         is_active=True).order_by('-id').first()
+                end_data = InverterData.objects.filter(device__location=location,
+                                                       created_at__date=to_date,
+                                                       is_active=True).order_by('-id').first()
+
+                context = {
+                    "total_energy": int(end_data.total_energy) - int(start_data.total_energy),
+                    "daily_energy": int(end_data.daily_energy) - int(start_data.daily_energy),
+                    "op_active_power": int(end_data.op_active_power) - int(start_data.op_active_power),
+                    "specific_yields": int(end_data.specific_yields) - int(start_data.specific_yields),
+                    "status": "status"}
 
                 pr, cuf, insolation = 0, 0, 0
                 irradiation = 250
                 insolation = irradiation * 24
-
-                if avg_data and avg_data['avg_sy']:
-                    pr = (avg_data['avg_sy'] * 100) / 24
+                if context and context['specific_yields']:
+                    pr = (int(inverter_data.specific_yields) * 100) / 24
                     cuf = pr / 365 * 24 * 12
 
                 wb = Workbook()
@@ -229,17 +266,21 @@ class ZipReportSerializer(serializers.ModelSerializer):
                     ['Plant Manager'],
                     ['Manager Phone'],
                     [''],
-                    ['Daily Energy', avg_data['avg_de'], "kWh"],
-                    ['Output Active Power', avg_data['avg_oap'], "kWp"],
-                    ['Specific Yield', avg_data['avg_sy'], "kWh/kWp"],
+                    ['Daily Energy', context['daily_energy'], "kWh"],
+                    ['Output Active Power', context['op_active_power'], "kWp"],
+                    ['Specific Yield', context['specific_yields'], "kWh/kWp"],
                     ['CUF', cuf, "%"],
                     ['Performance Ratio', pr, "%"],
-                    ['Total Energy', avg_data['avg_te'], "MWh"],
+                    ['Total Energy', context['total_energy'], "MWh"],
                     ['Solar Insolation', insolation, "KWh/m2"],
                     ['Solar Irradiation', irradiation, "W/m2"],
                 ]
                 plant_analysis_data = []
 
+                inverter_data = InverterData.objects.filter(device__location=location,
+                                                            created_at__date__lte=to_date,
+                                                            created_at__date__gte=from_date,
+                                                            is_active=True)
                 for inverter in inverter_data.iterator():
                     inverter_pr = (int(inverter.specific_yields) * 100) / 24
                     inverter_cuf = int(inverter_pr) / 365 * 24 * 12
@@ -250,12 +291,9 @@ class ZipReportSerializer(serializers.ModelSerializer):
 
                 for row in plant_summery_data:
                     ws1.append(row)
-
-                ws2.append(
-                        ["Timestamp", "Daily Energy [ kWh ]", "Output Active Power [ kWp ]",
-                         "Specific Yield [ kWh/kWp ]",
-                         "CUF [ % ]", "Performance Ratio [ % ]", "Total Energy [ MWh ]", "Solar Insolation [ KWh/m2 ]",
-                         "Solar Irradiation [ W/m2 ]"])
+                ws2.append(["Timestamp", "Daily Energy [ kWh ]", "Output Active Power [ kWp ]",
+                            "Specific Yield [ kWh/kWp ]", "CUF [ % ]", "Performance Ratio [ % ]",
+                            "Total Energy [ MWh ]", "Solar Insolation [ KWh/m2 ]", "Solar Irradiation [ W/m2 ]"])
                 red_font = Font(bold=True, italic=True)
                 for cell in ws2["1:1"]:
                     cell.font = red_font
