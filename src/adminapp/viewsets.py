@@ -1,4 +1,6 @@
 import shutil
+import re
+import json
 from django.http import HttpResponse
 from django.conf import settings
 from rest_framework import viewsets
@@ -124,7 +126,13 @@ class InverterDataViewSet(ModelViewSet):
 
     @action(methods=['POST'], detail=False)
     def inverter_data(self, request):
-        data = request.data
+        data = None
+        try:
+            raw_data = request.body.decode('utf-8').replace(" ", "")
+            raw_data = re.sub(":([\w\.]+)", r':"\1"', raw_data)
+            data = json.loads(raw_data)
+        except Exception as e:
+            print(str(e))
         InverterJsonData.objects.create(data=data)
         data = data.pop("data", None)
         imei = data.get('imei', None)
