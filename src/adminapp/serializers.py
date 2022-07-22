@@ -86,12 +86,12 @@ class LocationSummarySerializer(serializers.ModelSerializer):
                                                         is_active=True).order_by('-id').first()
         except:
             pass
-        status = "Online"
+        status = "Offline"
         if obj:
             device_data = InverterData.objects.filter(device__location=obj)
         for record in device_data:
             if record.created_at + datetime.timedelta(minutes=5) < now:
-                status = "Offline"
+                status = "Online"
         pr, cuf, insolation = 0, 0, 0
         irradiation = 250
         insolation = irradiation * 24
@@ -108,7 +108,7 @@ class LocationSummarySerializer(serializers.ModelSerializer):
                        }
             return context
         else:
-            return {"pr": pr, "cuf": cuf, "irradiation": irradiation, "insolation": insolation}
+            return {"pr": pr, "cuf": cuf, "irradiation": irradiation, "insolation": insolation, "status": status}
 
 
 class DeviceSummarySerializer(serializers.ModelSerializer):
