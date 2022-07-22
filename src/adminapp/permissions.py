@@ -39,6 +39,7 @@ class InverterDataPermissions(ResourcePermission):
     list_perms = AllowAny()
     partial_update_perms = AdminPerm()
     location_devices_perms = UserPerm()
+    inverter_data_perms = AllowAny()
 
 
 class ZipReportPermissions(ResourcePermission):

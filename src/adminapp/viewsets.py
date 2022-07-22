@@ -88,10 +88,8 @@ class DeviceViewSet(ModelViewSet):
 
     @action(methods=['GET'], detail=False, pagination_class=StandardResultsSetPagination)
     def location_devices(self, request):
-        print("-----------------", request.query_params.get('start_date'))
         start_date = request.query_params.get('start_date', str(datetime.now().strftime(("%Y-%m-%d"))))
         end_date = request.query_params.get('end_date', str(datetime.now().strftime(("%Y-%m-%d"))))
-        print(str(datetime.now().strftime(("%Y-%m-%d"))), str(datetime.now().strftime(("%Y-%m-%d"))))
         queryset = Device.objects.filter(location=request.query_params.get('location', 0), is_active=True)
         self.filterset_class = DeviceFilter
         queryset = self.filter_queryset(queryset)
@@ -123,6 +121,51 @@ class InverterDataViewSet(ModelViewSet):
     def perform_create(self, serializer):
         data = self.request.data
         serializer.save(data=data)
+
+    @action(methods=['POST'], detail=False)
+    def inverter_data(self, request):
+        data = request.data
+        data = data.pop("data", None)
+        InverterJsonData.objects.create(data=request.data)
+        imei = data.get('imei', None)
+        if imei is None:
+            return response.BadRequest({'detail': 'IMEI number is required!'})
+        try:
+            uid = data.get('uid', None)
+            modbus = data.get('modbus', None)
+            sid = rcnt = None
+            if modbus:
+                modbus = modbus[0]
+                sid = modbus.get('sid', None)
+                rcnt = modbus.get('rcnt', None)
+                reg4 = modbus.get('reg4', '0000')
+                daily_energy = int(reg4, 16)
+                reg5 = modbus.get('reg5', '0000')
+                reg6 = modbus.get('reg6', '0000')
+                total_energy = int(reg5 + reg6, 16)
+                reg78 = modbus.get('reg78', '0000')
+                reg79 = modbus.get('reg79', '0000')
+                op_active_power = int(reg78 + reg79, 16)
+                specific_yields = int(reg5 + reg6, 16)
+                inverter_op_active_power = int(reg78 + reg79, 16)
+                inverter_daily_energy = int(reg4, 16)
+                inverter_total_energy = int(reg5 + reg6, 16)
+                reg84 = modbus.get('reg84', '0000')
+                reg85 = modbus.get('reg85', '0000')
+                meter_active_power = int(reg84 + reg85, 16)
+        except:
+            return response.BadRequest({'detail': 'Key error! check data format.'})
+
+        device = Device.objects.filter(imei=imei).first()
+        if not device:
+            return response.BadRequest({'detail': 'This IMEI number is not used by any device!'})
+        InverterData.objects.create(device=device, imei=imei, sid=sid, uid=uid, rcnt=rcnt, daily_energy=daily_energy,
+                                    total_energy=total_energy, op_active_power=op_active_power,
+                                    specific_yields=specific_yields,
+                                    inverter_op_active_power=inverter_op_active_power,
+                                    inverter_daily_energy=inverter_daily_energy,
+                                    inverter_total_energy=inverter_total_energy, meter_active_power=meter_active_power)
+        return response.Ok({"detail": "Data stored successfully!"})
 
     @action(methods=['POST'], detail=False, pagination_class=StandardResultsSetPagination)
     def location_devices(self, request):
@@ -165,10 +208,10 @@ class ZipReportViewSet(ModelViewSet):
     def report_zip(self, request):
         report_id = request.query_params.get('report_id', None)
         queryset = ZipReport.objects.filter(pk=report_id).first()
-        archive_name = '{}/{}/{}'.format(settings.MEDIA_ROOT, str(queryset.id)+"-zip", queryset.name)
+        archive_name = '{}/{}/{}'.format(settings.MEDIA_ROOT, str(queryset.id) + "-zip", queryset.name)
         directory_name = '{}/{}/'.format(settings.MEDIA_ROOT, str(queryset.id))
         shutil.make_archive(archive_name, 'zip', directory_name)
         # zip_file = open(settings.MEDIA_ROOT + "/" + str(queryset.id)+"-zip" + "/" + str(queryset.name)+".zip", 'rb')
         # response = HttpResponse(zip_file, content_type='application/zip')
         # response['Content-Disposition'] = 'attachment; filename=name.zip'
-        return response.Ok({"path": "/"+str(queryset.id)+"-zip" + "/" + str(queryset.name)+".zip"})
+        return response.Ok({"path": "/" + str(queryset.id) + "-zip" + "/" + str(queryset.name) + ".zip"})
