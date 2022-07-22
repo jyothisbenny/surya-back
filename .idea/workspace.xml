@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e444002e-0434-404f-ad6f-bd971a15d4bf" name="Changes" comment="updated inverter api">
+    <list default="true" id="e444002e-0434-404f-ad6f-bd971a15d4bf" name="Changes" comment="changed data to json">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/adminapp/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/serializers.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -220,7 +221,14 @@
       <option name="project" value="LOCAL" />
       <updated>1658474994964</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="changed data to json">
+      <created>1658513370788</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1658513370788</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -246,6 +254,7 @@
     <MESSAGE value="updated xlsx errors" />
     <MESSAGE value="etoday bug fixed" />
     <MESSAGE value="updated inverter api" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated inverter api" />
+    <MESSAGE value="changed data to json" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed data to json" />
   </component>
 </project>
