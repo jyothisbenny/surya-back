@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e444002e-0434-404f-ad6f-bd971a15d4bf" name="Changes" comment="etoday bug fixed">
+    <list default="true" id="e444002e-0434-404f-ad6f-bd971a15d4bf" name="Changes" comment="updated inverter api">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/adminapp/permissions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/permissions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/adminapp/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/viewsets.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -208,7 +206,14 @@
       <option name="project" value="LOCAL" />
       <updated>1656047197313</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="updated inverter api">
+      <created>1658467063634</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1658467063634</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -233,6 +238,7 @@
     <MESSAGE value="updated requirements" />
     <MESSAGE value="updated xlsx errors" />
     <MESSAGE value="etoday bug fixed" />
-    <option name="LAST_COMMIT_MESSAGE" value="etoday bug fixed" />
+    <MESSAGE value="updated inverter api" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated inverter api" />
   </component>
 </project>

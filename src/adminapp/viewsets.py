@@ -125,8 +125,8 @@ class InverterDataViewSet(ModelViewSet):
     @action(methods=['POST'], detail=False)
     def inverter_data(self, request):
         data = request.data
+        InverterJsonData.objects.create(data=data)
         data = data.pop("data", None)
-        InverterJsonData.objects.create(data=request.data)
         imei = data.get('imei', None)
         if imei is None:
             return response.BadRequest({'detail': 'IMEI number is required!'})
