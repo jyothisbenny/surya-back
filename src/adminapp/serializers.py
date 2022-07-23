@@ -178,7 +178,7 @@ class ZipReportSerializer(serializers.ModelSerializer):
         frequency = validated_data.pop("frequency", None)
         category = validated_data.pop("category", None)
         name = validated_data.pop("name", None)
-        generate_zip.s(location_list, user, from_date, to_date, frequency, category, name).apply_async(countdown=5,
+        generate_zip.s(location_list, user, from_date, to_date, category, frequency, name).apply_async(countdown=5,
                                                                                                        serializer='pickle')
         instance = ZipReport.objects.all().first()
         return instance
