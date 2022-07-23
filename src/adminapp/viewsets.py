@@ -3,11 +3,8 @@ import re
 import json
 from django.http import HttpResponse
 from django.conf import settings
-from rest_framework import viewsets
 from datetime import datetime
 from rest_framework.decorators import action
-from django.db.models import Avg, IntegerField, FloatField
-from django.db.models.functions import Cast
 
 from .models import Location, Device, InverterData, InverterJsonData, ZipReport
 from .filters import LocationFilter, DeviceFilter, InverterDataFilter, ZipReportFilter

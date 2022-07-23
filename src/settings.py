@@ -160,3 +160,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_ROOT = os.path.join(BASE_DIR, 'backend', 'static')
 STATIC_URL = '/static/'
 MEDIA_URL = config('DOMAIN') + '/media/'
+
+# CELERY SETTINGS
+BROKER_URL = config('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = config('CELERY_BROKER_URL')
+CELERY_ACCEPT_CONTENT = ['pickle']
+CELERY_TASK_SERIALIZER = 'pickle'

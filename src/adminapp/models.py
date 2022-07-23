@@ -59,5 +59,5 @@ class ZipReport(BaseModel):
     status = models.CharField(max_length=128, blank=True, null=True, default='')
     zip_file = models.FileField(upload_to="reports/%Y/%m/%d", max_length=80, blank=True, null=True,
                                 validators=[file_extension_validator])
-    location = models.ManyToManyField(Location, blank=True, null=True)
+    location = models.ManyToManyField(Location, blank=True)
     is_active = models.BooleanField(default=True)
