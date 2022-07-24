@@ -33,7 +33,9 @@ def generate_zip(extra_key=None, location_list=None, user=None, from_date=None, 
                 context = {
                     "total_energy": int(end_data.total_energy) - int(start_data.total_energy),
                     "daily_energy": int(end_data.daily_energy) - int(start_data.daily_energy),
-                    "op_active_power": int(end_data.op_active_power) - int(start_data.op_active_power)}
+                    "op_active_power": int(end_data.op_active_power) - int(start_data.op_active_power),
+                    "specific_yields": int(end_data.specific_yields) - int(start_data.specific_yields)
+                 }
 
                 inverter_data = InverterData.objects.filter(device__location=location,
                                                             created_at__date__lte=to_date,
@@ -65,12 +67,12 @@ def generate_zip(extra_key=None, location_list=None, user=None, from_date=None, 
                     ['Plant Manager'],
                     ['Manager Phone'],
                     [''],
-                    ['Daily Energy', context['daily_energy'], "kWh"],
-                    ['Output Active Power', context['op_active_power'], "kWp"],
-                    ['Specific Yield', context['specific_yields'], "kWh/kWp"],
+                    ['Daily Energy', context['daily_energy'] if 'daily_energy' in context else "--", "kWh"],
+                    ['Output Active Power', context['op_active_power'] if 'op_active_power' in context else "--", "kWp"],
+                    ['Specific Yield', context['specific_yields'] if 'specific_yields' in context else "--", "kWh/kWp"],
                     ['CUF', cuf, "%"],
                     ['Performance Ratio', pr, "%"],
-                    ['Total Energy', context['total_energy'], "MWh"],
+                    ['Total Energy', context['total_energy'] if 'total_energy' in context else "--", "MWh"],
                     ['Solar Insolation', insolation, "KWh/m2"],
                     ['Solar Irradiation', irradiation, "W/m2"],
                 ]
