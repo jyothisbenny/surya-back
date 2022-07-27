@@ -92,7 +92,7 @@ class LocationSummarySerializer(serializers.ModelSerializer):
         if obj:
             device_data = InverterData.objects.filter(device__location=obj)
             if device_data:
-                device_data = device_data.order_by('created_at').first()
+                device_data = device_data.order_by('created_at').last()
                 if device_data.created_at + datetime.timedelta(minutes=5) > now:
                     status = "Online"
         pr, cuf, insolation = 0, 0, 0
@@ -127,7 +127,7 @@ class DeviceSummarySerializer(serializers.ModelSerializer):
         if obj.imei:
             instance = InverterData.objects.filter(imei=obj.imei)
         if instance:
-            imei_last_record = instance.order_by('created_at').first()
+            imei_last_record = instance.order_by('created_at').last()
             if imei_last_record.created_at + datetime.timedelta(minutes=5) > now:
                 status = "Online"
         start_date = self.context.get('start_date')
