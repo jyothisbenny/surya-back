@@ -91,9 +91,10 @@ class LocationSummarySerializer(serializers.ModelSerializer):
         status = "Offline"
         if obj:
             device_data = InverterData.objects.filter(device__location=obj)
-        for record in device_data:
-            if record.created_at + datetime.timedelta(minutes=5) < now:
-                status = "Online"
+            if device_data:
+                device_data = device_data.order_by('created_at').first()
+                if device_data.created_at + datetime.timedelta(minutes=5) > now:
+                    status = "Online"
         pr, cuf, insolation = 0, 0, 0
         irradiation = 250
         insolation = irradiation * 24
@@ -121,15 +122,14 @@ class DeviceSummarySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_summary(self, obj):
-        imei_last_record = None
-        status = None
+        instance = None
+        status = "Offline"
         if obj.imei:
-            imei_last_record = InverterData.objects.filter(imei=obj.imei).last()
-        if imei_last_record:
+            instance = InverterData.objects.filter(imei=obj.imei)
+        if instance:
+            imei_last_record = instance.order_by('created_at').first()
             if imei_last_record.created_at + datetime.timedelta(minutes=5) > now:
                 status = "Online"
-        else:
-            status = "Offline"
         start_date = self.context.get('start_date')
         end_date = self.context.get('end_date')
 
