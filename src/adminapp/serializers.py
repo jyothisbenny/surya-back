@@ -76,6 +76,18 @@ class InverterDataSerializer(ModelSerializer):
         return DeviceSerializer(obj.device).data if obj.device else None
 
 
+class ETodayInverterDataSerializer(ModelSerializer):
+    irradiation = serializers.SerializerMethodField(required=False)
+
+    class Meta:
+        model = InverterData
+        fields = ('id', 'daily_energy', 'op_active_power', 'irradiation', 'created_at',)
+
+    def get_irradiation(self, obj):
+        irradiation = 250
+        return irradiation
+
+
 class LocationSummarySerializer(serializers.ModelSerializer):
     summary = serializers.SerializerMethodField(required=False)
 
@@ -95,7 +107,7 @@ class LocationSummarySerializer(serializers.ModelSerializer):
             device_data = InverterData.objects.filter(device__location=obj)
             if device_data:
                 device_data = device_data.order_by('created_at').last()
-                if device_data.created_at + datetime.timedelta(minutes=5) > utc.localize(datetime.now()):
+                if device_data.created_at + datetime.timedelta(minutes=5) > utc.localize(datetime.datetime.now()):
                     status = "Online"
         pr, cuf, insolation = 0, 0, 0
         irradiation = 250
@@ -130,7 +142,7 @@ class DeviceSummarySerializer(serializers.ModelSerializer):
             instance = InverterData.objects.filter(imei=obj.imei)
         if instance:
             imei_last_record = instance.order_by('created_at').last()
-            if imei_last_record.created_at + datetime.timedelta(minutes=5) > utc.localize(datetime.now()):
+            if imei_last_record.created_at + datetime.timedelta(minutes=5) > utc.localize(datetime.datetime.now()):
                 status = "Online"
         start_date = self.context.get('start_date')
         end_date = self.context.get('end_date')

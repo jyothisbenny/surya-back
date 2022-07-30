@@ -13,6 +13,7 @@ class LocationPermissions(ResourcePermission):
     location_list_perms = AllowAny()
     get_location_count_perms = AllowAny()
     user_locations_perms = UserPerm()
+    graph_data_perms = AllowAny()
 
 
 class DevicePermissions(ResourcePermission):
