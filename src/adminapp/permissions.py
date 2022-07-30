@@ -7,25 +7,26 @@ class LocationPermissions(ResourcePermission):
     global_perms = None
     retrieve_perms = UserPerm()
     create_perms = AdminPerm()
-    update_perms = AllowAny()
+    update_perms = AdminPerm()
     create_with_base64_perms = AllowAny()
     multiple_perms = AllowAny()
-    location_list_perms = AllowAny()
-    get_location_count_perms = AllowAny()
-    user_locations_perms = UserPerm()
+    location_list_perms = AdminPerm() | UserPerm()
+    get_location_count_perms = AdminPerm() |UserPerm()
+    user_locations_perms = AdminPerm() | UserPerm()
+    graph_data_perms = AdminPerm() | UserPerm()
 
 
 class DevicePermissions(ResourcePermission):
     metadata_perms = AllowAny()
     enough_perms = None
     global_perms = None
-    destroy_perms = AllowAny()
-    retrieve_perms = AllowAny()
-    create_perms = AllowAny()
-    update_perms = AllowAny()
-    list_perms = AllowAny()
-    partial_update_perms = AllowAny()
-    location_devices_perms = UserPerm()
+    destroy_perms = AdminPerm() | UserPerm()
+    retrieve_perms = AdminPerm() | UserPerm()
+    create_perms = AdminPerm()
+    update_perms = AdminPerm() | UserPerm()
+    list_perms = AdminPerm() | UserPerm()
+    partial_update_perms = AdminPerm() | UserPerm()
+    location_devices_perms = AdminPerm() | UserPerm()
 
 
 class InverterDataPermissions(ResourcePermission):
@@ -36,9 +37,9 @@ class InverterDataPermissions(ResourcePermission):
     retrieve_perms = AdminPerm()
     create_perms = AllowAny()
     update_perms = AdminPerm()
-    list_perms = AllowAny()
+    list_perms = AdminPerm() | UserPerm()
     partial_update_perms = AdminPerm()
-    location_devices_perms = UserPerm()
+    location_devices_perms = AdminPerm() | UserPerm()
     inverter_data_perms = AllowAny()
 
 
@@ -50,5 +51,5 @@ class ZipReportPermissions(ResourcePermission):
     retrieve_perms = AdminPerm() | UserPerm()
     create_perms = AdminPerm() | UserPerm()
     update_perms = AdminPerm() | UserPerm()
-    list_perms = AllowAny() | UserPerm()
-    report_zip_perms = AllowAny()
+    list_perms = AdminPerm() | UserPerm()
+    report_zip_perms = AdminPerm() | UserPerm()
