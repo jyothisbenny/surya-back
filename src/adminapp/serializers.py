@@ -18,7 +18,7 @@ from ..base.utils import timezone
 from ..base.validators.form_validations import file_extension_validator
 
 now = timezone.now_local()
-utc=pytz.UTC
+utc = pytz.UTC
 
 
 class LocationSerializer(ModelSerializer):
@@ -192,10 +192,16 @@ class ZipReportSerializer(serializers.ModelSerializer):
         frequency = validated_data.pop("frequency", None)
         category = validated_data.pop("category", None)
         name = validated_data.pop("name", None)
-        generate_zip.s(location_list, user, from_date, to_date, category, frequency, name).apply_async(countdown=5,
-                                                                                                       serializer='pickle')
-        instance = ZipReport.objects.all().first()
-        return instance
+        locations = []
+        for record in location_list:
+            locations.append(record.id)
+        report_instance = ZipReport.objects.create(user=user, from_date=from_date,
+                                                   to_date=to_date,
+                                                   category=category, frequency=frequency, name=name)
+        from_date = from_date.strftime("%Y-%m-%d")
+        to_date = to_date.strftime("%Y-%m-%d")
+        generate_zip.s(locations, report_instance.id, from_date, to_date).apply_async(countdown=5, serializer='json')
+        return report_instance
 
 
 class FileSerializer(serializers.Serializer):
