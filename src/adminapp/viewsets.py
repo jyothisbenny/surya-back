@@ -72,7 +72,7 @@ class LocationViewSet(ModelViewSet):
 
     @action(methods=['GET'], detail=False, pagination_class=StandardResultsSetPagination)
     def graph_data(self, request):
-        THRESHOLD_VALUE = 1000
+        THRESHOLD_VALUE = 100
         from_date = request.query_params.get('from_date', str(datetime.now().strftime(("%Y-%m-%d"))))
         to_date = request.query_params.get('to_date', str(datetime.now().strftime(("%Y-%m-%d"))))
         device_id = request.query_params.get('device')
