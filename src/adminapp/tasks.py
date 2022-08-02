@@ -26,11 +26,11 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
             if from_date == to_date:
                 from_date = from_date - datetime.timedelta(days=1)
             start_data = InverterData.objects.filter(device__location=location,
-                                                     created_at__date=from_date,
-                                                     is_active=True).order_by('-id').first()
+                                                     created_at__date__gte=from_date,
+                                                     is_active=True).first()
             end_data = InverterData.objects.filter(device__location=location,
-                                                   created_at__date=to_date,
-                                                   is_active=True).order_by('-id').first()
+                                                   created_at__date__lte=to_date,
+                                                   is_active=True).last()
             wb = Workbook()
             sheet = wb['Sheet']
             wb.remove(sheet)
