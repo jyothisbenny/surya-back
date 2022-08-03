@@ -1,5 +1,6 @@
 import pandas as pd
 import datetime
+import pytz
 
 from pathlib import Path
 from openpyxl import Workbook
@@ -17,6 +18,7 @@ from ..base.utils import timezone
 from ..base.validators.form_validations import file_extension_validator
 
 now = timezone.now_local()
+utc = pytz.UTC
 
 
 class LocationSerializer(ModelSerializer):
@@ -74,6 +76,18 @@ class InverterDataSerializer(ModelSerializer):
         return DeviceSerializer(obj.device).data if obj.device else None
 
 
+class ETodayInverterDataSerializer(ModelSerializer):
+    irradiation = serializers.SerializerMethodField(required=False)
+
+    class Meta:
+        model = InverterData
+        fields = ('id', 'daily_energy', 'op_active_power', 'irradiation', 'created_at',)
+
+    def get_irradiation(self, obj):
+        irradiation = 250
+        return irradiation
+
+
 class LocationSummarySerializer(serializers.ModelSerializer):
     summary = serializers.SerializerMethodField(required=False)
 
@@ -91,9 +105,10 @@ class LocationSummarySerializer(serializers.ModelSerializer):
         status = "Offline"
         if obj:
             device_data = InverterData.objects.filter(device__location=obj)
-        for record in device_data:
-            if record.created_at + datetime.timedelta(minutes=5) < now:
-                status = "Online"
+            if device_data:
+                device_data = device_data.order_by('created_at').last()
+                if device_data.created_at + datetime.timedelta(minutes=5) > utc.localize(datetime.datetime.now()):
+                    status = "Online"
         pr, cuf, insolation = 0, 0, 0
         irradiation = 250
         insolation = irradiation * 24
@@ -121,15 +136,14 @@ class DeviceSummarySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_summary(self, obj):
-        imei_last_record = None
-        status = None
+        instance = None
+        status = "Offline"
         if obj.imei:
-            imei_last_record = InverterData.objects.filter(imei=obj.imei).last()
-        if imei_last_record:
-            if imei_last_record.created_at + datetime.timedelta(minutes=5) > now:
+            instance = InverterData.objects.filter(imei=obj.imei)
+        if instance:
+            imei_last_record = instance.order_by('created_at').last()
+            if imei_last_record.created_at + datetime.timedelta(minutes=5) > utc.localize(datetime.datetime.now()):
                 status = "Online"
-        else:
-            status = "Offline"
         start_date = self.context.get('start_date')
         end_date = self.context.get('end_date')
 
@@ -178,10 +192,16 @@ class ZipReportSerializer(serializers.ModelSerializer):
         frequency = validated_data.pop("frequency", None)
         category = validated_data.pop("category", None)
         name = validated_data.pop("name", None)
-        generate_zip.s(location_list, user, from_date, to_date, category, frequency, name).apply_async(countdown=5,
-                                                                                                       serializer='pickle')
-        instance = ZipReport.objects.all().first()
-        return instance
+        locations = []
+        for record in location_list:
+            locations.append(record.id)
+        report_instance = ZipReport.objects.create(user=user, from_date=from_date,
+                                                   to_date=to_date,
+                                                   category=category, frequency=frequency, name=name)
+        from_date = from_date.strftime("%Y-%m-%d")
+        to_date = to_date.strftime("%Y-%m-%d")
+        generate_zip.s(locations, report_instance.id, from_date, to_date).apply_async(countdown=5, serializer='json')
+        return report_instance
 
 
 class FileSerializer(serializers.Serializer):

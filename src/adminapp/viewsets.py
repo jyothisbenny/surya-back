@@ -1,10 +1,13 @@
 import shutil
 import re
 import json
+
 from django.http import HttpResponse
 from django.conf import settings
 from datetime import datetime
 from rest_framework.decorators import action
+from django.db.models import Max, FloatField
+from django.db.models.functions import Coalesce
 
 from .models import Location, Device, InverterData, InverterJsonData, ZipReport
 from .filters import LocationFilter, DeviceFilter, InverterDataFilter, ZipReportFilter
@@ -66,6 +69,38 @@ class LocationViewSet(ModelViewSet):
         if page is not None:
             return self.get_paginated_response(LocationSummarySerializer(page, many=True, context={"date": date}).data)
         return response.Ok(LocationSummarySerializer(queryset, many=True, context={"date": date}).data)
+
+    @action(methods=['GET'], detail=False, pagination_class=StandardResultsSetPagination)
+    def graph_data(self, request):
+        THRESHOLD_VALUE = 100
+        from_date = request.query_params.get('from_date', str(datetime.now().strftime(("%Y-%m-%d"))))
+        to_date = request.query_params.get('to_date', str(datetime.now().strftime(("%Y-%m-%d"))))
+        device_id = request.query_params.get('device')
+        inverter_data = InverterData.objects.filter(device=device_id,
+                                                    created_at__date__lte=to_date,
+                                                    created_at__date__gte=from_date,
+                                                    is_active=True)
+        count = inverter_data.count()
+        inverter_data = inverter_data.order_by('created_at')
+        results = []
+        if count < THRESHOLD_VALUE:
+            results = list(inverter_data.values('created_at', 'daily_energy'))
+        else:
+            ratio = round(count / THRESHOLD_VALUE)
+            for i in range(0, count, ratio):
+                selected_data = inverter_data[i:i + ratio]
+                max_energy = selected_data.aggregate(
+                    max_energy=Coalesce(Max('daily_energy', output_field=FloatField()), 0, output_field=FloatField()))
+                max_energy = max_energy.get('max_energy', 0)
+                instance = inverter_data.filter(id__in=selected_data.values_list('id', flat=True),
+                                                daily_energy=max_energy).first()
+                results.append({'created_at': instance.created_at, 'daily_energy': instance.daily_energy})
+        x_axis = []
+        y_axis = []
+        for i in results:
+            x_axis.append(i.get("created_at"))
+            y_axis.append(i.get("daily_energy"))
+        return response.Ok({"x_axis": x_axis, "y_axis": y_axis})
 
 
 class DeviceViewSet(ModelViewSet):
