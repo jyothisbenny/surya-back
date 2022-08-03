@@ -21,8 +21,6 @@ def generate_zip(extra_key=None, location_list=None, user=None, from_date=None, 
         try:
             report_instance.location.add(location)
             context = None
-            if from_date == to_date:
-                from_date = from_date - datetime.timedelta(days=1)
             start_data = InverterData.objects.filter(device__location=location,
                                                      created_at__date=from_date,
                                                      is_active=True).order_by('-id').first()
