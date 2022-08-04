@@ -9,6 +9,7 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 
 from .models import InverterData, ZipReport, Location
+from ..base.utils.timezone import localtime
 
 logger = get_task_logger(__name__)
 
@@ -86,7 +87,7 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
                     inverter_pr = (int(inverter.specific_yields) * 100) / 24
                     inverter_cuf = int(inverter_pr) / 365 * 24 * 12
                     plant_analysis_data.append(
-                        [inverter.created_at.replace(tzinfo=None), inverter.daily_energy, inverter.op_active_power,
+                        [localtime(inverter.created_at).replace(tzinfo=None), inverter.daily_energy, inverter.op_active_power,
                          inverter.specific_yields,
                          inverter_cuf, inverter_pr, inverter.total_energy, insolation, irradiation])
             else:

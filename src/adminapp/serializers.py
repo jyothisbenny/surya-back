@@ -16,6 +16,7 @@ from ..accounts.serializers import UserSerializer
 from ..base.serializers import ModelSerializer
 from ..base.utils import timezone
 from ..base.validators.form_validations import file_extension_validator
+from ..base.utils.timezone import localtime, now_local
 
 now = timezone.now_local()
 utc = pytz.UTC
@@ -107,7 +108,7 @@ class LocationSummarySerializer(serializers.ModelSerializer):
             device_data = InverterData.objects.filter(device__location=obj)
             if device_data:
                 device_data = device_data.order_by('created_at').last()
-                if device_data.created_at + datetime.timedelta(minutes=5) > utc.localize(datetime.datetime.now()):
+                if localtime(device_data.created_at) + datetime.timedelta(minutes=5) > now_local():
                     status = "Online"
         pr, cuf, insolation = 0, 0, 0
         irradiation = 250
@@ -142,7 +143,7 @@ class DeviceSummarySerializer(serializers.ModelSerializer):
             instance = InverterData.objects.filter(imei=obj.imei)
         if instance:
             imei_last_record = instance.order_by('created_at').last()
-            if imei_last_record.created_at + datetime.timedelta(minutes=5) > utc.localize(datetime.datetime.now()):
+            if localtime(imei_last_record.created_at) + datetime.timedelta(minutes=5) > now_local():
                 status = "Online"
         start_date = self.context.get('start_date')
         end_date = self.context.get('end_date')
