@@ -110,7 +110,7 @@ class LocationSummarySerializer(serializers.ModelSerializer):
                 device_data = device_data.order_by('created_at').last()
                 if localtime(device_data.created_at) + datetime.timedelta(minutes=5) > now_local():
                     status = "Online"
-        pr, cuf, insolation = 0, 0, 0
+        pr = cuf = insolation = None
         irradiation = 250
         insolation = irradiation * 24
         if inverter_data and inverter_data.specific_yields:
@@ -126,7 +126,14 @@ class LocationSummarySerializer(serializers.ModelSerializer):
                        }
             return context
         else:
-            return {"pr": pr, "cuf": cuf, "irradiation": irradiation, "insolation": insolation, "status": status}
+            context = {"total_energy": None,
+                       "daily_energy": None,
+                       "op_active_power": None,
+                       "specific_yields": None,
+                       "pr": pr, "cuf": cuf, "irradiation": irradiation,
+                       "insolation": insolation, "status": status
+                       }
+            return context
 
 
 class DeviceSummarySerializer(serializers.ModelSerializer):
@@ -171,7 +178,10 @@ class DeviceSummarySerializer(serializers.ModelSerializer):
                        }
             return context
         else:
-            context = {"status": status}
+            context = {"total_energy": None,
+                       "daily_energy": None,
+                       "uid": None,
+                       "status": status}
             return context
 
 
