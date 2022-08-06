@@ -157,7 +157,7 @@ class DeviceSummarySerializer(serializers.ModelSerializer):
 
         if start_date == end_date:
             inverter_data = InverterData.objects.filter(device=obj, created_at__date=start_date,
-                                                        is_active=True).order_by('-id').first()
+                                                        is_active=True).last()
             if inverter_data:
                 context = {"total_energy": inverter_data.total_energy,
                            "daily_energy": inverter_data.daily_energy,
