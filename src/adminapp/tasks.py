@@ -24,12 +24,37 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
             location = Location.objects.filter(pk=record).first()
             report_instance.location.add(location)
             context = None
-            start_data = InverterData.objects.filter(device__location=location,
-                                                     created_at__date__gte=from_date,
-                                                     is_active=True).first()
-            end_data = InverterData.objects.filter(device__location=location,
-                                                   created_at__date__lte=to_date,
-                                                   is_active=True).last()
+            inverter_data = None
+            start_data = None
+            end_data = None
+            if from_date == to_date:
+                inverter_data = InverterData.objects.filter(device__location=location,
+                                                            created_at__date=from_date,
+                                                            is_active=True).last()
+                if inverter_data:
+                    context = {"total_energy": inverter_data.total_energy,
+                               "daily_energy": inverter_data.daily_energy,
+                               "op_active_power": inverter_data.op_active_power,
+                               "specific_yields": inverter_data.specific_yields}
+            else:
+                start_data = InverterData.objects.filter(device__location=location,
+                                                         created_at__date__gte=from_date,
+                                                         is_active=True).first()
+                end_data = InverterData.objects.filter(device__location=location,
+                                                       created_at__date__lte=to_date,
+                                                       is_active=True).last()
+                if end_data and start_data:
+                    context = {
+                        "total_energy": int(end_data.total_energy) - int(start_data.total_energy),
+                        "daily_energy": int(end_data.daily_energy) - int(start_data.daily_energy),
+                        "op_active_power": int(end_data.op_active_power) - int(start_data.op_active_power),
+                        "specific_yields": int(end_data.specific_yields) - int(start_data.specific_yields)
+                    }
+
+                    inverter_data = InverterData.objects.filter(device__location=location,
+                                                                created_at__date__lte=to_date,
+                                                                created_at__date__gte=from_date,
+                                                                is_active=True).last()
             wb = Workbook()
             sheet = wb['Sheet']
             wb.remove(sheet)
@@ -41,18 +66,8 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
             # ws6 = wb.create_sheet("Help & Support")
             plant_summery_data = []
             plant_analysis_data = []
-            if end_data and start_data:
-                context = {
-                    "total_energy": int(end_data.total_energy) - int(start_data.total_energy),
-                    "daily_energy": int(end_data.daily_energy) - int(start_data.daily_energy),
-                    "op_active_power": int(end_data.op_active_power) - int(start_data.op_active_power),
-                    "specific_yields": int(end_data.specific_yields) - int(start_data.specific_yields)
-                }
 
-                inverter_data = InverterData.objects.filter(device__location=location,
-                                                            created_at__date__lte=to_date,
-                                                            created_at__date__gte=from_date,
-                                                            is_active=True).last()
+            if context and inverter_data:
                 pr, cuf, insolation = 0, 0, 0
                 irradiation = 250
                 insolation = irradiation * 24
@@ -87,7 +102,8 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
                     inverter_pr = (int(inverter.specific_yields) * 100) / 24
                     inverter_cuf = int(inverter_pr) / 365 * 24 * 12
                     plant_analysis_data.append(
-                        [localtime(inverter.created_at).replace(tzinfo=None), inverter.daily_energy, inverter.op_active_power,
+                        [localtime(inverter.created_at).replace(tzinfo=None), inverter.daily_energy,
+                         inverter.op_active_power,
                          inverter.specific_yields,
                          inverter_cuf, inverter_pr, inverter.total_energy, insolation, irradiation])
             else:
