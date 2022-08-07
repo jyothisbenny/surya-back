@@ -45,10 +45,10 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
                                                        is_active=True).last()
                 if end_data and start_data:
                     context = {
-                        "total_energy": int(end_data.total_energy) - int(start_data.total_energy),
-                        "daily_energy": int(end_data.daily_energy) - int(start_data.daily_energy),
-                        "op_active_power": int(end_data.op_active_power) - int(start_data.op_active_power),
-                        "specific_yields": int(end_data.specific_yields) - int(start_data.specific_yields)
+                        "total_energy": float(end_data.total_energy) - float(start_data.total_energy),
+                        "daily_energy": float(end_data.daily_energy) - float(start_data.daily_energy),
+                        "op_active_power": float(end_data.op_active_power) - float(start_data.op_active_power),
+                        "specific_yields": float(end_data.specific_yields) - float(start_data.specific_yields)
                     }
 
                     inverter_data = InverterData.objects.filter(device__location=location,
@@ -72,7 +72,7 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
                 irradiation = 250
                 insolation = irradiation * 24
                 if context and "specific_yields" in context and inverter_data:
-                    pr = (int(inverter_data.specific_yields) * 100) / 24
+                    pr = (float(inverter_data.specific_yields) * 100) / 24
                     cuf = pr / 365 * 24 * 12
 
                 plant_summery_data = [
@@ -99,8 +99,8 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
                                                             created_at__date__gte=from_date,
                                                             is_active=True)
                 for inverter in inverter_data.iterator():
-                    inverter_pr = (int(inverter.specific_yields) * 100) / 24
-                    inverter_cuf = int(inverter_pr) / 365 * 24 * 12
+                    inverter_pr = (float(inverter.specific_yields) * 100) / 24
+                    inverter_cuf = float(inverter_pr) / 365 * 24 * 12
                     plant_analysis_data.append(
                         [localtime(inverter.created_at).replace(tzinfo=None), inverter.daily_energy,
                          inverter.op_active_power,
