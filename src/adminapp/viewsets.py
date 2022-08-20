@@ -14,6 +14,7 @@ from .filters import LocationFilter, DeviceFilter, InverterDataFilter, ZipReport
 from .serializers import LocationSerializer, DeviceSerializer, InverterDataSerializer, LocationSummarySerializer, \
     DeviceSummarySerializer, ZipReportSerializer, FileSerializer
 from .permissions import LocationPermissions, DevicePermissions, InverterDataPermissions, ZipReportPermissions
+from .constants import INVERTER_TYPE_SUNGROW, INVERTER_TYPE_ABB
 from ..base import response
 from ..base.api.viewsets import ModelViewSet
 from ..base.api.pagination import StandardResultsSetPagination
@@ -170,10 +171,14 @@ class InverterDataViewSet(ModelViewSet):
         imei = data.get('imei', None)
         if imei is None:
             return response.BadRequest({'detail': 'IMEI number is required!'})
-        try:
-            uid = data.get('uid', None)
-            modbus = data.get('modbus', None)
-            sid = rcnt = None
+        device = Device.objects.filter(imei=imei).first()
+        if not device:
+            return response.BadRequest({'detail': 'This IMEI number is not used by any device!'})
+
+        uid = data.get('uid', None)
+        modbus = data.get('modbus', None)
+        sid = rcnt = None
+        if device.location.inverter_type == INVERTER_TYPE_SUNGROW:
             if modbus:
                 modbus = modbus[0]
                 sid = modbus.get('sid', None)
@@ -193,16 +198,32 @@ class InverterDataViewSet(ModelViewSet):
                 reg84 = modbus.get('reg84', '0000')
                 reg85 = modbus.get('reg85', '0000')
                 meter_active_power = int(reg84 + reg85, 16)
-        except:
-            return response.BadRequest({'detail': 'Key error! check data format.'})
-
-        device = Device.objects.filter(imei=imei).first()
-        if not device:
-            return response.BadRequest({'detail': 'This IMEI number is not used by any device!'})
+        elif device.location.inverter_type == INVERTER_TYPE_ABB:
+            if modbus:
+                modbus = modbus[0]
+                sid = modbus.get('sid', None)
+                rcnt = modbus.get('rcnt', None)
+                reg21 = modbus.get('reg21', '0000')
+                reg22 = modbus.get('reg22', '0000')
+                daily_energy = int(reg21 + reg22, 16)
+                reg23 = modbus.get('reg23', '0000')
+                reg24 = modbus.get('reg24', '0000')
+                total_energy = int(reg23 + reg24, 16)
+                reg45 = modbus.get('reg45', '0000')
+                reg46 = modbus.get('reg46', '0000')
+                op_active_power = int(reg45 + reg46, 16)
+                specific_yields = int(reg23 + reg24, 16)
+                inverter_op_active_power = int(reg45 + reg46, 16)
+                inverter_daily_energy = int(reg21 + reg22, 16)
+                inverter_total_energy = int(reg23 + reg24, 16)
+                reg84 = modbus.get('reg84', '0000')
+                reg85 = modbus.get('reg85', '0000')
+                meter_active_power = int(reg84 + reg85, 16)
+        else:
+            return response.BadRequest({'detail': 'Invalid Inverter type!'})
         InverterData.objects.create(device=device, imei=imei, sid=sid, uid=uid, rcnt=rcnt, daily_energy=daily_energy,
                                     total_energy=total_energy, op_active_power=op_active_power,
-                                    specific_yields=specific_yields,
-                                    inverter_op_active_power=inverter_op_active_power,
+                                    specific_yields=specific_yields, inverter_op_active_power=inverter_op_active_power,
                                     inverter_daily_energy=inverter_daily_energy,
                                     inverter_total_energy=inverter_total_energy, meter_active_power=meter_active_power)
         return response.Ok({"detail": "Data stored successfully!"})

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e444002e-0434-404f-ad6f-bd971a15d4bf" name="Changes" comment="updated permissions">
+    <list default="true" id="e444002e-0434-404f-ad6f-bd971a15d4bf" name="Changes" comment="added inverter type">
+      <change afterPath="$PROJECT_DIR$/src/adminapp/constants.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/adminapp/migrations/0015_location_inverter_type.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/adminapp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/adminapp/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/viewsets.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +27,18 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/.env" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/requirements.txt" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/__init__.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/accounts/serializers.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/adminapp/serializers.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/adminapp/services.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/adminapp/tasks.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/adminapp/tests.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/celery.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/settings.py" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -50,6 +66,7 @@
       <recent name="$PROJECT_DIR$/src/accounts" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/user" />
       <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
@@ -309,7 +326,49 @@
       <option name="project" value="LOCAL" />
       <updated>1659192991775</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="updated timezone">
+      <created>1659628054541</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1659628054541</updated>
+    </task>
+    <task id="LOCAL-00034" summary="updated data format">
+      <created>1659756628493</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1659756628493</updated>
+    </task>
+    <task id="LOCAL-00035" summary="updated data format">
+      <created>1659756791658</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1659756791658</updated>
+    </task>
+    <task id="LOCAL-00036" summary="fixed reports bug">
+      <created>1659860060017</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1659860060017</updated>
+    </task>
+    <task id="LOCAL-00037" summary="int to float">
+      <created>1659860583524</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1659860583524</updated>
+    </task>
+    <task id="LOCAL-00038" summary="added inverter type">
+      <created>1660982784839</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1660982784839</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -342,6 +401,11 @@
     <MESSAGE value="fixed offline status bug" />
     <MESSAGE value="added daily energy report" />
     <MESSAGE value="updated permissions" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated permissions" />
+    <MESSAGE value="updated timezone" />
+    <MESSAGE value="updated data format" />
+    <MESSAGE value="fixed reports bug" />
+    <MESSAGE value="int to float" />
+    <MESSAGE value="added inverter type" />
+    <option name="LAST_COMMIT_MESSAGE" value="added inverter type" />
   </component>
 </project>

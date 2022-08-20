@@ -14,6 +14,7 @@ class Location(TimeStampedModel):
     user = models.ManyToManyField(User, related_name='location_users', blank=True)
     latitude = models.CharField(max_length=128, blank=True, null=True, default='')
     longitude = models.CharField(max_length=128, blank=True, null=True, default='')
+    inverter_type = models.CharField(max_length=128, blank=True, null=True, default='')
     is_suspended = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
