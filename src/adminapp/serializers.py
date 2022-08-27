@@ -173,7 +173,7 @@ class DeviceSummarySerializer(serializers.ModelSerializer):
         if inverter_start_data and inverter_end_data:
             context = {"total_energy": int(inverter_end_data.total_energy) - int(inverter_start_data.total_energy),
                        "daily_energy": int(inverter_end_data.daily_energy) - int(inverter_start_data.daily_energy),
-                       "uid": int(inverter_end_data.op_active_power) - int(inverter_start_data.op_active_power),
+                       "uid": inverter_end_data.uid if inverter_start_data.uid else 0,
                        "status": status
                        }
             return context
