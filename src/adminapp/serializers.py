@@ -161,7 +161,7 @@ class DeviceSummarySerializer(serializers.ModelSerializer):
             if inverter_data:
                 context = {"total_energy": inverter_data.total_energy,
                            "daily_energy": inverter_data.daily_energy,
-                           "uid": inverter_data.op_active_power,
+                           "uid": inverter_data.uid if inverter_data.uid else 0,
                            "status": status}
                 return context
 
