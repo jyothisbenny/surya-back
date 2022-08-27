@@ -86,11 +86,11 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
                     [''],
                     ['Daily Energy', context['daily_energy'] if 'daily_energy' in context else "--", "kWh"],
                     ['Output Active Power', context['op_active_power'] if 'op_active_power' in context else "--",
-                     "kWp"],
+                     "kw"],
                     ['Specific Yield', context['specific_yields'] if 'specific_yields' in context else "--", "kWh/kWp"],
                     ['CUF', cuf, "%"],
                     ['Performance Ratio', pr, "%"],
-                    ['Total Energy', context['total_energy'] if 'total_energy' in context else "--", "MWh"],
+                    ['Total Energy', context['total_energy'] if 'total_energy' in context else "--", "kwh"],
                     ['Solar Insolation', insolation, "KWh/m2"],
                     ['Solar Irradiation', irradiation, "W/m2"],
                 ]

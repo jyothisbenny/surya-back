@@ -184,20 +184,20 @@ class InverterDataViewSet(ModelViewSet):
                 sid = modbus.get('sid', None)
                 rcnt = modbus.get('rcnt', None)
                 reg4 = modbus.get('reg4', '0000')
-                daily_energy = int(reg4, 16)
+                daily_energy = (int(reg4, 16)) * 0.1
                 reg5 = modbus.get('reg5', '0000')
                 reg6 = modbus.get('reg6', '0000')
-                total_energy = int(reg5 + reg6, 16)
-                reg78 = modbus.get('reg78', '0000')
-                reg79 = modbus.get('reg79', '0000')
-                op_active_power = int(reg78 + reg79, 16)
-                specific_yields = int(reg5 + reg6, 16)
-                inverter_op_active_power = int(reg78 + reg79, 16)
+                total_energy = (int(reg6 + reg5, 16)) * 1
+                reg32 = modbus.get('reg32', '0000')
+                reg33 = modbus.get('reg33', '0000')
+                op_active_power = (int(reg33 + reg32, 16)) * 0.001
+                specific_yields = int(reg6 + reg5, 16)
+                inverter_op_active_power = int(reg33 + reg32, 16)
                 inverter_daily_energy = int(reg4, 16)
-                inverter_total_energy = int(reg5 + reg6, 16)
+                inverter_total_energy = int(reg6 + reg5, 16)
                 reg84 = modbus.get('reg84', '0000')
                 reg85 = modbus.get('reg85', '0000')
-                meter_active_power = int(reg84 + reg85, 16)
+                meter_active_power = int(reg85 + reg84, 16)
         elif device.location.inverter_type == INVERTER_TYPE_ABB:
             if modbus:
                 modbus = modbus[0]
@@ -205,20 +205,20 @@ class InverterDataViewSet(ModelViewSet):
                 rcnt = modbus.get('rcnt', None)
                 reg21 = modbus.get('reg21', '0000')
                 reg22 = modbus.get('reg22', '0000')
-                daily_energy = int(reg21 + reg22, 16)
+                daily_energy = (int(reg22 + reg21, 16)) * 0.1
                 reg23 = modbus.get('reg23', '0000')
                 reg24 = modbus.get('reg24', '0000')
-                total_energy = int(reg23 + reg24, 16)
+                total_energy = (int(reg24 + reg23, 16)) * 1
                 reg45 = modbus.get('reg45', '0000')
                 reg46 = modbus.get('reg46', '0000')
-                op_active_power = int(reg45 + reg46, 16)
-                specific_yields = int(reg23 + reg24, 16)
-                inverter_op_active_power = int(reg45 + reg46, 16)
-                inverter_daily_energy = int(reg21 + reg22, 16)
-                inverter_total_energy = int(reg23 + reg24, 16)
+                op_active_power = (int(reg46 + reg45, 16)) * 1
+                specific_yields = int(reg24 + reg23, 16)
+                inverter_op_active_power = int(reg46 + reg45, 16)
+                inverter_daily_energy = int(reg22 + reg21, 16)
+                inverter_total_energy = int(reg24 + reg23, 16)
                 reg84 = modbus.get('reg84', '0000')
                 reg85 = modbus.get('reg85', '0000')
-                meter_active_power = int(reg84 + reg85, 16)
+                meter_active_power = int(reg85 + reg84, 16)
         else:
             return response.BadRequest({'detail': 'Invalid Inverter type!'})
         InverterData.objects.create(device=device, imei=imei, sid=sid, uid=uid, rcnt=rcnt, daily_energy=daily_energy,
