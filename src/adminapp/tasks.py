@@ -119,9 +119,9 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
                 plant_analysis_data = [['Error', "No data for the selected range"]]
             for row in plant_summery_data:
                 ws1.append(row)
-            ws2.append(["Timestamp", "Daily Energy [ kWh ]", "Output Active Power [ kWp ]",
+            ws2.append(["Timestamp", "Daily Energy [ kWh ]", "Output Active Power [ kw ]",
                         "Specific Yield [ kWh/kWp ]", "CUF [ % ]", "Performance Ratio [ % ]",
-                        "Total Energy [ MWh ]", "Solar Insolation [ KWh/m2 ]", "Solar Irradiation [ W/m2 ]"])
+                        "Total Energy [ kwh ]", "Solar Insolation [ KWh/m2 ]", "Solar Irradiation [ W/m2 ]"])
             red_font = Font(bold=True, italic=True)
             for cell in ws2["1:1"]:
                 cell.font = red_font
