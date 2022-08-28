@@ -111,16 +111,16 @@ class LocationSummarySerializer(serializers.ModelSerializer):
                 if localtime(device_data.created_at) + datetime.timedelta(minutes=5) > now_local():
                     status = "Online"
         pr = cuf = insolation = None
-        oap = float(inverter_data.op_active_power)
-        normal_power = float(inverter_data.normal_power)
-        if oap == 0 or None:
-            oap = 1
-        if normal_power == 0 or None:
-            normal_power = 1
-
-        irradiation = (oap * 1361) / normal_power
-        insolation = irradiation * 24
         if inverter_data:
+            oap = float(inverter_data.op_active_power)
+            normal_power = float(inverter_data.normal_power)
+            if oap == 0 or None:
+                oap = 1
+            if normal_power == 0 or None:
+                normal_power = 1
+
+            irradiation = (oap * 1361) / normal_power
+            insolation = irradiation * 24
             pr = (oap * 1000 * 100) / (normal_power * irradiation)
             cuf = (float(inverter_data.daily_energy) * 100) / (normal_power * irradiation)
             context = {"total_energy": inverter_data.total_energy,
