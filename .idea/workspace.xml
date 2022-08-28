@@ -4,7 +4,6 @@
     <list default="true" id="e444002e-0434-404f-ad6f-bd971a15d4bf" name="Changes" comment="reports updated with new calculations">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/adminapp/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/adminapp/tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/tasks.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,27 +98,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1650019535656</updated>
-    </task>
-    <task id="LOCAL-00002" summary="initial commit">
-      <created>1650020170193</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1650020170193</updated>
-    </task>
-    <task id="LOCAL-00003" summary="initial commit">
-      <created>1650020206456</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1650020206456</updated>
-    </task>
-    <task id="LOCAL-00004" summary="added all the API's for device, location, and user">
-      <created>1652634615776</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1652634615776</updated>
     </task>
     <task id="LOCAL-00005" summary="added location_devices api">
       <created>1652641097254</created>
@@ -443,7 +421,28 @@
       <option name="project" value="LOCAL" />
       <updated>1661685824594</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="reports updated with new calculations">
+      <created>1661692388825</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1661692388825</updated>
+    </task>
+    <task id="LOCAL-00052" summary="reports updated with new calculations">
+      <created>1661695974340</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1661695974340</updated>
+    </task>
+    <task id="LOCAL-00053" summary="reports updated with new calculations">
+      <created>1661696409084</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1661696409084</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

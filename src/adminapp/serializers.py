@@ -123,7 +123,7 @@ class LocationSummarySerializer(serializers.ModelSerializer):
                 insolation = irradiation * 24
                 normal_irradiation = normal_power * irradiation
                 if normal_irradiation != 0:
-                    cuf = (float(inverter_data.daily_energy) * 100) / normal_irradiation
+                    cuf = (float(inverter_data.daily_energy) * 100) / (normal_power * 24)
                     pr = (oap * 1000 * 100) / normal_irradiation
             context = {"total_energy": inverter_data.total_energy,
                        "daily_energy": inverter_data.daily_energy,
