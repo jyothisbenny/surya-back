@@ -46,6 +46,7 @@ class InverterData(BaseModel):
     inverter_daily_energy = models.FloatField(blank=True, null=True)
     inverter_total_energy = models.FloatField(blank=True, null=True)
     meter_active_power = models.FloatField(blank=True, null=True)
+    normal_power = models.FloatField(blank=True, null=True)
     # meter_active_energy = models.CharField(max_length=128, blank=True, null=True, default='')
     is_active = models.BooleanField(default=True)
 

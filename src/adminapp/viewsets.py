@@ -129,7 +129,8 @@ class LocationViewSet(ModelViewSet):
             for i in range(0, count, ratio):
                 selected_data = inverter_data[i:i + ratio]
                 max_oap = selected_data.aggregate(
-                    max_energy=Coalesce(Max('op_active_power', output_field=FloatField()), 0, output_field=FloatField()))
+                    max_energy=Coalesce(Max('op_active_power', output_field=FloatField()), 0,
+                                        output_field=FloatField()))
                 max_oap = max_oap.get('max_energy', 0)
                 instance = inverter_data.filter(id__in=selected_data.values_list('id', flat=True),
                                                 op_active_power=max_oap).first()
@@ -220,6 +221,8 @@ class InverterDataViewSet(ModelViewSet):
                 modbus = modbus[0]
                 sid = modbus.get('sid', None)
                 rcnt = modbus.get('rcnt', None)
+                reg2 = modbus.get('reg2', '0000')
+                normal_power = (int(reg2, 16)) * 0.1
                 reg4 = modbus.get('reg4', '0000')
                 daily_energy = (int(reg4, 16)) * 0.1
                 reg5 = modbus.get('reg5', '0000')
@@ -228,7 +231,7 @@ class InverterDataViewSet(ModelViewSet):
                 reg32 = modbus.get('reg32', '0000')
                 reg33 = modbus.get('reg33', '0000')
                 op_active_power = (int(reg33 + reg32, 16)) * 0.001
-                specific_yields = int(reg6 + reg5, 16)
+                specific_yields = daily_energy / normal_power
                 inverter_op_active_power = int(reg33 + reg32, 16)
                 inverter_daily_energy = int(reg4, 16)
                 inverter_total_energy = int(reg6 + reg5, 16)
@@ -240,6 +243,8 @@ class InverterDataViewSet(ModelViewSet):
                 modbus = modbus[0]
                 sid = modbus.get('sid', None)
                 rcnt = modbus.get('rcnt', None)
+                reg2 = modbus.get('reg2', '0000')
+                normal_power = (int(reg2, 16)) * 0.1
                 reg21 = modbus.get('reg21', '0000')
                 reg22 = modbus.get('reg22', '0000')
                 daily_energy = (int(reg22 + reg21, 16)) * 0.1
@@ -249,7 +254,7 @@ class InverterDataViewSet(ModelViewSet):
                 reg45 = modbus.get('reg45', '0000')
                 reg46 = modbus.get('reg46', '0000')
                 op_active_power = (int(reg46 + reg45, 16)) * 1
-                specific_yields = int(reg24 + reg23, 16)
+                specific_yields = daily_energy / normal_power
                 inverter_op_active_power = int(reg46 + reg45, 16)
                 inverter_daily_energy = int(reg22 + reg21, 16)
                 inverter_total_energy = int(reg24 + reg23, 16)
@@ -261,7 +266,7 @@ class InverterDataViewSet(ModelViewSet):
         InverterData.objects.create(device=device, imei=imei, sid=sid, uid=uid, rcnt=rcnt, daily_energy=daily_energy,
                                     total_energy=total_energy, op_active_power=op_active_power,
                                     specific_yields=specific_yields, inverter_op_active_power=inverter_op_active_power,
-                                    inverter_daily_energy=inverter_daily_energy,
+                                    inverter_daily_energy=inverter_daily_energy, normal_power=normal_power,
                                     inverter_total_energy=inverter_total_energy, meter_active_power=meter_active_power)
         return response.Ok({"detail": "Data stored successfully!"})
 
