@@ -69,12 +69,16 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
 
             if context and inverter_data:
                 pr, cuf, insolation = 0, 0, 0
-                irradiation = 250
-                insolation = irradiation * 24
-                if context and "specific_yields" in context and inverter_data:
-                    pr = (float(inverter_data.specific_yields) * 100) / 24
-                    cuf = pr / 365 * 24 * 12
+                oap = float(inverter_data.op_active_power)
+                normal_power = float(inverter_data.normal_power)
+                if oap == 0 or None:
+                    oap = 1
+                if normal_power == 0 or None:
+                    normal_power = 1
 
+                irradiation = (oap * 1361) / normal_power
+                insolation = irradiation * 24
+                pr = (oap * 1000 * 100) / (normal_power * irradiation)
                 plant_summery_data = [
                     ['Plant Name', location.name],
                     ['Date', from_date,
