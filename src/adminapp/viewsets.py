@@ -100,7 +100,7 @@ class LocationViewSet(ModelViewSet):
         y_axis = []
         for i in results:
             x_axis.append(i.get("created_at"))
-            y_axis.append(i.get("daily_energy"))
+            y_axis.append(round(i.get("daily_energy"), 3))
         return response.Ok({"x_axis": x_axis, "y_axis": y_axis})
 
 
