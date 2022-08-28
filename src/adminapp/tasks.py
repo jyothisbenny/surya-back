@@ -79,8 +79,8 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
                     irradiation = (oap * 1361) / normal_power
                     insolation = irradiation * 24
                     normal_irradiation = normal_power * irradiation
+                    cuf = (float(inverter_data.daily_energy) * 100) / (normal_power * 24)
                     if normal_irradiation != 0:
-                        cuf = (float(inverter_data.daily_energy) * 100) / (normal_power * 24)
                         pr = (oap * 1000 * 100) / normal_irradiation
                 plant_summery_data = [
                     ['Plant Name', location.name],
