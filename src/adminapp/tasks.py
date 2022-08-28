@@ -69,13 +69,8 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
 
             if context and inverter_data:
                 pr, cuf, insolation = 0, 0, 0
-                oap = float(inverter_data.op_active_power)
-                normal_power = float(inverter_data.normal_power)
-                if oap == 0 or None:
-                    oap = 1
-                if normal_power == 0 or None:
-                    normal_power = 1
-
+                oap = float(inverter_data.op_active_power) if inverter_data.op_active_power else 0
+                normal_power = float(inverter_data.normal_power) if inverter_data.normal_power else 0
                 irradiation = (oap * 1361) / normal_power
                 insolation = irradiation * 24
                 pr = (oap * 1000 * 100) / (normal_power * irradiation)
@@ -92,7 +87,7 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
                     ['Daily Energy', context['daily_energy'] if 'daily_energy' in context else "--", "kWh"],
                     ['Output Active Power', context['op_active_power'] if 'op_active_power' in context else "--",
                      "kw"],
-                    ['Specific Yield', context['specific_yields'] if 'specific_yields' in context else "--", "kWh/kWp"],
+                    ['Specific Yield', context['specific_yields'] if 'specific_yields' in context else "--", "(KWh/kwp)"],
                     ['CUF', cuf, "%"],
                     ['Performance Ratio', pr, "%"],
                     ['Total Energy', context['total_energy'] if 'total_energy' in context else "--", "kwh"],
@@ -124,8 +119,8 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
                 plant_analysis_data = [['Error', "No data for the selected range"]]
             for row in plant_summery_data:
                 ws1.append(row)
-            ws2.append(["Timestamp", "Daily Energy [ kWh ]", "Output Active Power [ kw ]",
-                        "Specific Yield [ kWh/kWp ]", "CUF [ % ]", "Performance Ratio [ % ]",
+            ws2.append(["Timestamp", "Daily Energy [ KWh ]", "Output Active Power [ KW ]",
+                        "Specific Yield [ KWh/kwp ]", "CUF [ % ]", "Performance Ratio [ % ]",
                         "Total Energy [ kwh ]", "Solar Insolation [ KWh/m2 ]", "Solar Irradiation [ W/m2 ]"])
             red_font = Font(bold=True, italic=True)
             for cell in ws2["1:1"]:

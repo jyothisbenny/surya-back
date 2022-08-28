@@ -112,13 +112,8 @@ class LocationSummarySerializer(serializers.ModelSerializer):
                     status = "Online"
         pr = cuf = insolation = None
         if inverter_data:
-            oap = float(inverter_data.op_active_power)
-            normal_power = float(inverter_data.normal_power)
-            if oap == 0 or None:
-                oap = 1
-            if normal_power == 0 or None:
-                normal_power = 1
-
+            oap = float(inverter_data.op_active_power) if inverter_data.op_active_power else 0
+            normal_power = float(inverter_data.normal_power) if inverter_data.normal_power else 0
             irradiation = (oap * 1361) / normal_power
             insolation = irradiation * 24
             pr = (oap * 1000 * 100) / (normal_power * irradiation)
