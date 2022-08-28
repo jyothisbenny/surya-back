@@ -136,7 +136,7 @@ class LocationSummarySerializer(serializers.ModelSerializer):
                        "daily_energy": None,
                        "op_active_power": None,
                        "specific_yields": None,
-                       "pr": pr, "cuf": cuf, "irradiation": irradiation,
+                       "pr": pr, "cuf": cuf, "irradiation": None,
                        "insolation": insolation, "status": status
                        }
             return context
