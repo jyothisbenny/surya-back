@@ -2,7 +2,7 @@ import shutil
 import re
 import json
 
-from django.http import HttpResponse
+from decouple import config
 from django.conf import settings
 from datetime import datetime
 from rest_framework.decorators import action
@@ -72,8 +72,8 @@ class LocationViewSet(ModelViewSet):
         return response.Ok(LocationSummarySerializer(queryset, many=True, context={"date": date}).data)
 
     @action(methods=['GET'], detail=False, pagination_class=StandardResultsSetPagination)
-    def graph_data(self, request):
-        THRESHOLD_VALUE = 100
+    def de_vs_time(self, request):
+        THRESHOLD_VALUE = int(config('THRESHOLD_VALUE'))
         from_date = request.query_params.get('from_date', str(datetime.now().strftime(("%Y-%m-%d"))))
         to_date = request.query_params.get('to_date', str(datetime.now().strftime(("%Y-%m-%d"))))
         device_id = request.query_params.get('device')
@@ -81,6 +81,10 @@ class LocationViewSet(ModelViewSet):
                                                     created_at__date__lte=to_date,
                                                     created_at__date__gte=from_date,
                                                     is_active=True)
+        x_axis = []
+        y_axis = []
+        if not inverter_data:
+            return response.Ok({"x_axis": x_axis, "y_axis": y_axis})
         count = inverter_data.count()
         inverter_data = inverter_data.order_by('created_at')
         results = []
@@ -96,11 +100,44 @@ class LocationViewSet(ModelViewSet):
                 instance = inverter_data.filter(id__in=selected_data.values_list('id', flat=True),
                                                 daily_energy=max_energy).first()
                 results.append({'created_at': instance.created_at, 'daily_energy': instance.daily_energy})
-        x_axis = []
-        y_axis = []
         for i in results:
             x_axis.append(i.get("created_at"))
             y_axis.append(round(i.get("daily_energy"), 3))
+        return response.Ok({"x_axis": x_axis, "y_axis": y_axis})
+
+    @action(methods=['GET'], detail=False, pagination_class=StandardResultsSetPagination)
+    def oap_vs_time(self, request):
+        THRESHOLD_VALUE = int(config('THRESHOLD_VALUE'))
+        from_date = request.query_params.get('from_date', str(datetime.now().strftime(("%Y-%m-%d"))))
+        to_date = request.query_params.get('to_date', str(datetime.now().strftime(("%Y-%m-%d"))))
+        device_id = request.query_params.get('device')
+        inverter_data = InverterData.objects.filter(device=device_id,
+                                                    created_at__date__lte=to_date,
+                                                    created_at__date__gte=from_date,
+                                                    is_active=True)
+        x_axis = []
+        y_axis = []
+        if not inverter_data:
+            return response.Ok({"x_axis": x_axis, "y_axis": y_axis})
+        count = inverter_data.count()
+        inverter_data = inverter_data.order_by('created_at')
+        results = []
+        if count < THRESHOLD_VALUE:
+            results = list(inverter_data.values('created_at', 'op_active_power'))
+        else:
+            ratio = round(count / THRESHOLD_VALUE)
+            for i in range(0, count, ratio):
+                selected_data = inverter_data[i:i + ratio]
+                max_oap = selected_data.aggregate(
+                    max_energy=Coalesce(Max('op_active_power', output_field=FloatField()), 0, output_field=FloatField()))
+                max_oap = max_oap.get('max_energy', 0)
+                instance = inverter_data.filter(id__in=selected_data.values_list('id', flat=True),
+                                                op_active_power=max_oap).first()
+                results.append({'created_at': instance.created_at, 'op_active_power': instance.op_active_power})
+
+        for i in results:
+            x_axis.append(i.get("created_at"))
+            y_axis.append(round(i.get("op_active_power"), 3))
         return response.Ok({"x_axis": x_axis, "y_axis": y_axis})
 
 

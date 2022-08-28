@@ -13,7 +13,8 @@ class LocationPermissions(ResourcePermission):
     location_list_perms = AdminPerm() | UserPerm()
     get_location_count_perms = AdminPerm() |UserPerm()
     user_locations_perms = AdminPerm() | UserPerm()
-    graph_data_perms = AdminPerm() | UserPerm()
+    de_vs_time_perms = AdminPerm() | UserPerm()
+    oap_vs_time_perms = AdminPerm() | UserPerm()
 
 
 class DevicePermissions(ResourcePermission):
