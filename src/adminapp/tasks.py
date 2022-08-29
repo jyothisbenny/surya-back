@@ -24,37 +24,15 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
             location = Location.objects.filter(pk=record).first()
             report_instance.location.add(location)
             context = None
-            inverter_data = None
-            start_data = None
-            end_data = None
-            if from_date == to_date:
-                inverter_data = InverterData.objects.filter(device__location=location,
-                                                            created_at__date=from_date,
-                                                            is_active=True).order_by('created_at').last()
-                if inverter_data:
-                    context = {"total_energy": inverter_data.total_energy,
-                               "daily_energy": inverter_data.daily_energy,
-                               "op_active_power": inverter_data.op_active_power,
-                               "specific_yields": inverter_data.specific_yields}
-            else:
-                start_data = InverterData.objects.filter(device__location=location,
-                                                         created_at__date__gte=from_date,
-                                                         is_active=True).order_by('created_at').first()
-                end_data = InverterData.objects.filter(device__location=location,
-                                                       created_at__date__lte=to_date,
-                                                       is_active=True).order_by('created_at').last()
-                if end_data and start_data:
-                    context = {
-                        "total_energy": float(end_data.total_energy) - float(start_data.total_energy),
-                        "daily_energy": float(end_data.daily_energy) - float(start_data.daily_energy),
-                        "op_active_power": float(end_data.op_active_power) - float(start_data.op_active_power),
-                        "specific_yields": float(end_data.specific_yields) - float(start_data.specific_yields)
-                    }
-
-                    inverter_data = InverterData.objects.filter(device__location=location,
-                                                                created_at__date__lte=to_date,
-                                                                created_at__date__gte=from_date,
-                                                                is_active=True).last()
+            inverter_data = InverterData.objects.filter(device__location=location,
+                                                        created_at__date__lte=to_date,
+                                                        created_at__date__gte=from_date,
+                                                        is_active=True).order_by('created_at').last()
+            if inverter_data:
+                context = {"total_energy": inverter_data.total_energy,
+                           "daily_energy": inverter_data.daily_energy,
+                           "op_active_power": inverter_data.op_active_power,
+                           "specific_yields": inverter_data.specific_yields}
             wb = Workbook()
             sheet = wb['Sheet']
             wb.remove(sheet)
@@ -93,18 +71,19 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
                     ['Daily Energy', context['daily_energy'] if 'daily_energy' in context else "--", "kWh"],
                     ['Output Active Power', context['op_active_power'] if 'op_active_power' in context else "--",
                      "kw"],
-                    ['Specific Yield', context['specific_yields'] if 'specific_yields' in context else "--", "(KWh/kwp)"],
+                    ['Specific Yield', context['specific_yields'] if 'specific_yields' in context else "--",
+                     "(KWh/kwp)"],
                     ['CUF', cuf, "%"],
                     ['Performance Ratio', pr, "%"],
                     ['Total Energy', context['total_energy'] if 'total_energy' in context else "--", "kwh"],
                     ['Solar Insolation', insolation, "KWh/m2"],
                     ['Solar Irradiation', irradiation, "W/m2"],
                 ]
-                inverter_data = InverterData.objects.filter(device__location=location,
-                                                            created_at__date__lte=to_date,
-                                                            created_at__date__gte=from_date,
-                                                            is_active=True)
-                for inverter in inverter_data.iterator():
+                all_inverter_data = InverterData.objects.filter(device__location=location,
+                                                                created_at__date__lte=to_date,
+                                                                created_at__date__gte=from_date,
+                                                                is_active=True)
+                for inverter in all_inverter_data.iterator():
                     pr = 0
                     cuf = 0
                     irradiation = 0

@@ -163,34 +163,20 @@ class DeviceSummarySerializer(serializers.ModelSerializer):
         start_date = self.context.get('start_date')
         end_date = self.context.get('end_date')
 
-        if start_date == end_date:
-            inverter_data = InverterData.objects.filter(device=obj, created_at__date=start_date,
-                                                        is_active=True).order_by('created_at').last()
-            if inverter_data:
-                context = {"total_energy": inverter_data.total_energy,
-                           "daily_energy": inverter_data.daily_energy,
-                           "uid": inverter_data.uid if inverter_data.uid else 0,
-                           "status": status}
-                return context
-
-        inverter_start_data = InverterData.objects.filter(device=obj, created_at__date=self.context.get('start_date'),
-                                                          is_active=True).order_by('-id').first()
-        inverter_end_data = InverterData.objects.filter(device=obj, created_at__date=end_date,
-                                                        is_active=True).order_by('-id').first()
-
-        if inverter_start_data and inverter_end_data:
-            context = {"total_energy": int(inverter_end_data.total_energy) - int(inverter_start_data.total_energy),
-                       "daily_energy": int(inverter_end_data.daily_energy) - int(inverter_start_data.daily_energy),
-                       "uid": inverter_end_data.uid if inverter_start_data.uid else 0,
-                       "status": status
-                       }
-            return context
-        else:
-            context = {"total_energy": None,
-                       "daily_energy": None,
-                       "uid": None,
+        inverter_data = InverterData.objects.filter(device=obj, created_at__date__gte=start_date,
+                                                    created_at__date__lte=end_date,
+                                                    is_active=True).order_by('created_at').last()
+        context = {"total_energy": None,
+                   "daily_energy": None,
+                   "uid": None,
+                   "status": status}
+        if inverter_data:
+            context = {"total_energy": inverter_data.total_energy,
+                       "daily_energy": inverter_data.daily_energy,
+                       "uid": inverter_data.uid if inverter_data.uid else 0,
                        "status": status}
             return context
+        return context
 
 
 class ZipReportSerializer(serializers.ModelSerializer):
