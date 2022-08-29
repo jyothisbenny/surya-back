@@ -101,7 +101,7 @@ class LocationViewSet(ModelViewSet):
                                                 daily_energy=max_energy).first()
                 results.append({'created_at': instance.created_at, 'daily_energy': instance.daily_energy})
         for i in results:
-            x_axis.append(i.get("created_at"))
+            x_axis.append(timezone.localtime(i.get("created_at")))
             y_axis.append(round(i.get("daily_energy"), 3))
         return response.Ok({"x_axis": x_axis, "y_axis": y_axis})
 
@@ -137,7 +137,7 @@ class LocationViewSet(ModelViewSet):
                 results.append({'created_at': instance.created_at, 'op_active_power': instance.op_active_power})
 
         for i in results:
-            x_axis.append(i.get("created_at"))
+            x_axis.append(timezone.localtime(i.get("created_at")))
             y_axis.append(round(i.get("op_active_power"), 3))
         return response.Ok({"x_axis": x_axis, "y_axis": y_axis})
 
