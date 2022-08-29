@@ -30,7 +30,7 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
             if from_date == to_date:
                 inverter_data = InverterData.objects.filter(device__location=location,
                                                             created_at__date=from_date,
-                                                            is_active=True).last()
+                                                            is_active=True).order_by('created_at').last()
                 if inverter_data:
                     context = {"total_energy": inverter_data.total_energy,
                                "daily_energy": inverter_data.daily_energy,
@@ -39,10 +39,10 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
             else:
                 start_data = InverterData.objects.filter(device__location=location,
                                                          created_at__date__gte=from_date,
-                                                         is_active=True).first()
+                                                         is_active=True).order_by('created_at').first()
                 end_data = InverterData.objects.filter(device__location=location,
                                                        created_at__date__lte=to_date,
-                                                       is_active=True).last()
+                                                       is_active=True).order_by('created_at').last()
                 if end_data and start_data:
                     context = {
                         "total_energy": float(end_data.total_energy) - float(start_data.total_energy),
