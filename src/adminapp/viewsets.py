@@ -231,7 +231,9 @@ class InverterDataViewSet(ModelViewSet):
                 reg32 = modbus.get('reg32', '0000')
                 reg33 = modbus.get('reg33', '0000')
                 op_active_power = (int(reg33 + reg32, 16)) * 0.001
-                specific_yields = daily_energy / normal_power
+                specific_yields = 0
+                if normal_power != 0:
+                    specific_yields = daily_energy / normal_power
                 inverter_op_active_power = int(reg33 + reg32, 16)
                 inverter_daily_energy = int(reg4, 16)
                 inverter_total_energy = int(reg6 + reg5, 16)
@@ -254,7 +256,9 @@ class InverterDataViewSet(ModelViewSet):
                 reg45 = modbus.get('reg45', '0000')
                 reg46 = modbus.get('reg46', '0000')
                 op_active_power = (int(reg46 + reg45, 16)) * 1
-                specific_yields = daily_energy / normal_power
+                specific_yields = 0
+                if normal_power != 0:
+                    specific_yields = daily_energy / normal_power
                 inverter_op_active_power = int(reg46 + reg45, 16)
                 inverter_daily_energy = int(reg22 + reg21, 16)
                 inverter_total_energy = int(reg24 + reg23, 16)
