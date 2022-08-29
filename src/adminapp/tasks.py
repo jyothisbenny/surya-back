@@ -105,12 +105,11 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
                                                             created_at__date__gte=from_date,
                                                             is_active=True)
                 for inverter in inverter_data.iterator():
-                    oap = float(inverter_data.op_active_power) if inverter_data.op_active_power else 0
-                    normal_power = float(inverter.normal_power) if inverter.normal_power else 0
+                    pr = 0
+                    cuf = 0
                     irradiation = 0
                     insolation = 0
-                    cuf = 0
-                    pr = 0
+                    normal_power = float(inverter.normal_power) if inverter.normal_power else 0
                     if normal_power != 0:
                         irradiation = (oap * 1361) / normal_power
                         insolation = irradiation * 24
@@ -120,7 +119,8 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
                             pr = (oap * 1000 * 100) / normal_irradiation
                     plant_analysis_data.append(
                         [localtime(inverter.created_at).replace(tzinfo=None), inverter.daily_energy,
-                         oap, inverter.specific_yields, cuf, pr, inverter.total_energy, insolation, irradiation])
+                         inverter.op_active_power, inverter.specific_yields, cuf, pr, inverter.total_energy,
+                         insolation, irradiation])
             else:
                 plant_summery_data = [
                     ['Plant Name', location.name],
@@ -135,7 +135,7 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
             for row in plant_summery_data:
                 ws1.append(row)
             ws2.append(["Timestamp", "Daily Energy [ KWh ]", "Output Active Power [ KW ]",
-                        "Specific Yield [ KWh/kwp ]", "Performance Ratio [ % ]", "CUF [ % ]",
+                        "Specific Yield [ KWh/kwp ]", "CUF [ % ]", "Performance Ratio [ % ]",
                         "Total Energy [ kwh ]", "Solar Insolation [ KWh/m2 ]", "Solar Irradiation [ W/m2 ]"])
             red_font = Font(bold=True, italic=True)
             for cell in ws2["1:1"]:
