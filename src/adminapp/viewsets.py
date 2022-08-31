@@ -15,12 +15,12 @@ from .serializers import LocationSerializer, DeviceSerializer, InverterDataSeria
     DeviceSummarySerializer, ZipReportSerializer, FileSerializer
 from .permissions import LocationPermissions, DevicePermissions, InverterDataPermissions, ZipReportPermissions
 from .constants import INVERTER_TYPE_SUNGROW, INVERTER_TYPE_ABB
+from .services import operation_state_check, alarm_name_check, alarm_status_check
 from ..base import response
 from ..base.api.viewsets import ModelViewSet
 from ..base.api.pagination import StandardResultsSetPagination
 from ..base.utils import timezone
 from ..base.utils.timezone import localtime
-
 
 now = timezone.now_local()
 
@@ -242,6 +242,19 @@ class InverterDataViewSet(ModelViewSet):
                 reg84 = modbus.get('reg84', '0000')
                 reg85 = modbus.get('reg85', '0000')
                 meter_active_power = int(reg85 + reg84, 16)
+                reg39 = int(modbus.get('reg39', '0000'), 16)
+                alarm_status = alarm_status_check(reg39)
+                alarm_ops_state = operation_state_check(reg39)
+                reg46 = int(modbus.get('reg46', '0000'), 16)
+                alarm_name = alarm_name_check(reg46)
+                alarm_year = int(modbus.get('reg40', '0000'), 16)
+                alarm_month = int(modbus.get('reg41', '0000'), 16)
+                alarm_date = int(modbus.get('reg42', '0000'), 16)
+                alarm_hr = int(modbus.get('reg43', '0000'), 16)
+                alarm_min = int(modbus.get('reg44', '0000'), 16)
+                alarm_sec = int(modbus.get('reg45', '0000'), 16)
+                alarm_date = str(alarm_year) + "/" + str(alarm_month) + "/" + str(alarm_date) + ", " + str(alarm_hr) \
+                             + ":" + str(alarm_min) + ":" + str(alarm_sec)
         elif device.location.inverter_type == INVERTER_TYPE_ABB:
             if modbus:
                 modbus = modbus[0]
@@ -267,13 +280,27 @@ class InverterDataViewSet(ModelViewSet):
                 reg84 = modbus.get('reg84', '0000')
                 reg85 = modbus.get('reg85', '0000')
                 meter_active_power = int(reg85 + reg84, 16)
+                reg39 = int(modbus.get('reg39', '0000'), 16)
+                alarm_status = alarm_status_check(reg39)
+                alarm_ops_state = operation_state_check(reg39)
+                alarm_name = alarm_name_check(reg46)
+                alarm_year = int(modbus.get('reg40', '0000'), 16)
+                alarm_month = int(modbus.get('reg41', '0000'), 16)
+                alarm_date = int(modbus.get('reg42', '0000'), 16)
+                alarm_hr = int(modbus.get('reg43', '0000'), 16)
+                alarm_min = int(modbus.get('reg44', '0000'), 16)
+                alarm_sec = int(modbus.get('reg45', '0000'), 16)
+                alarm_date = str(alarm_year) + "/" + str(alarm_month) + "/" + str(alarm_date) + ", " + str(alarm_hr) \
+                             + ":" + str(alarm_min) + ":" + str(alarm_sec)
         else:
             return response.BadRequest({'detail': 'Invalid Inverter type!'})
         InverterData.objects.create(device=device, imei=imei, sid=sid, uid=uid, rcnt=rcnt, daily_energy=daily_energy,
                                     total_energy=total_energy, op_active_power=op_active_power,
                                     specific_yields=specific_yields, inverter_op_active_power=inverter_op_active_power,
                                     inverter_daily_energy=inverter_daily_energy, nominal_power=nominal_power,
-                                    inverter_total_energy=inverter_total_energy, meter_active_power=meter_active_power)
+                                    inverter_total_energy=inverter_total_energy, meter_active_power=meter_active_power,
+                                    alarm_status=alarm_status, alarm_ops_state=alarm_ops_state, alarm_name=alarm_name,
+                                    alarm_date=alarm_date)
         return response.Ok({"detail": "Data stored successfully!"})
 
     @action(methods=['POST'], detail=False, pagination_class=StandardResultsSetPagination)
