@@ -47,16 +47,16 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
 
             if context and inverter_data:
                 oap = float(inverter_data.op_active_power) if inverter_data.op_active_power else 0
-                normal_power = float(inverter_data.normal_power) if inverter_data.normal_power else 0
+                nominal_power = float(inverter_data.nominal_power) if inverter_data.nominal_power else 0
                 irradiation = 0
                 insolation = 0
                 cuf = 0
                 pr = 0
-                if normal_power != 0:
-                    irradiation = (oap * 1361) / normal_power
+                if nominal_power != 0:
+                    irradiation = (oap * 1361) / nominal_power
                     insolation = irradiation * 24
-                    normal_irradiation = normal_power * irradiation
-                    cuf = (float(inverter_data.daily_energy) * 100) / (normal_power * 24)
+                    normal_irradiation = nominal_power * irradiation
+                    cuf = (float(inverter_data.daily_energy) * 100) / (nominal_power * 24)
                     if normal_irradiation != 0:
                         pr = (oap * 1000 * 100) / normal_irradiation
                 plant_summery_data = [
@@ -88,12 +88,12 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
                     cuf = 0
                     irradiation = 0
                     insolation = 0
-                    normal_power = float(inverter.normal_power) if inverter.normal_power else 0
-                    if normal_power != 0:
-                        irradiation = (oap * 1361) / normal_power
+                    nominal_power = float(inverter.nominal_power) if inverter.nominal_power else 0
+                    if nominal_power != 0:
+                        irradiation = (oap * 1361) / nominal_power
                         insolation = irradiation * 24
-                        normal_irradiation = normal_power * irradiation
-                        cuf = (float(inverter.daily_energy) * 100) / (normal_power * 24)
+                        normal_irradiation = nominal_power * irradiation
+                        cuf = (float(inverter.daily_energy) * 100) / (nominal_power * 24)
                         if normal_irradiation != 0:
                             pr = (oap * 1000 * 100) / normal_irradiation
                     plant_analysis_data.append(

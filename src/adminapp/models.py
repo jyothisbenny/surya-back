@@ -15,6 +15,9 @@ class Location(TimeStampedModel):
     latitude = models.CharField(max_length=128, blank=True, null=True, default='')
     longitude = models.CharField(max_length=128, blank=True, null=True, default='')
     inverter_type = models.CharField(max_length=128, blank=True, null=True, default='')
+    manager = models.CharField(max_length=128, blank=True, null=True, default='')
+    phone = models.CharField(max_length=128, blank=True, null=True, default='')
+    capacity = models.CharField(max_length=128, blank=True, null=True, default='')
     is_suspended = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
@@ -46,7 +49,11 @@ class InverterData(BaseModel):
     inverter_daily_energy = models.FloatField(blank=True, null=True)
     inverter_total_energy = models.FloatField(blank=True, null=True)
     meter_active_power = models.FloatField(blank=True, null=True)
-    normal_power = models.FloatField(blank=True, null=True)
+    alarm_status = models.CharField(max_length=128, blank=True, null=True, default='')
+    alarm_ops_state = models.CharField(max_length=128, blank=True, null=True, default='')
+    alarm_name = models.CharField(max_length=128, blank=True, null=True, default='')
+    nominal_power = models.FloatField(blank=True, null=True)
+    alarm_date = models.CharField(max_length=128, blank=True, null=True, default='')
     # meter_active_energy = models.CharField(max_length=128, blank=True, null=True, default='')
     is_active = models.BooleanField(default=True)
 

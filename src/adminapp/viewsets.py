@@ -224,7 +224,7 @@ class InverterDataViewSet(ModelViewSet):
                 sid = modbus.get('sid', None)
                 rcnt = modbus.get('rcnt', None)
                 reg2 = modbus.get('reg2', '0000')
-                normal_power = (int(reg2, 16)) * 0.1
+                nominal_power = (int(reg2, 16)) * 0.1
                 reg4 = modbus.get('reg4', '0000')
                 daily_energy = (int(reg4, 16)) * 0.1
                 reg5 = modbus.get('reg5', '0000')
@@ -234,8 +234,8 @@ class InverterDataViewSet(ModelViewSet):
                 reg33 = modbus.get('reg33', '0000')
                 op_active_power = (int(reg33 + reg32, 16)) * 0.001
                 specific_yields = 0
-                if normal_power != 0:
-                    specific_yields = daily_energy / normal_power
+                if nominal_power != 0:
+                    specific_yields = daily_energy / nominal_power
                 inverter_op_active_power = int(reg33 + reg32, 16)
                 inverter_daily_energy = int(reg4, 16)
                 inverter_total_energy = int(reg6 + reg5, 16)
@@ -248,7 +248,7 @@ class InverterDataViewSet(ModelViewSet):
                 sid = modbus.get('sid', None)
                 rcnt = modbus.get('rcnt', None)
                 reg2 = modbus.get('reg2', '0000')
-                normal_power = (int(reg2, 16)) * 0.1
+                nominal_power = (int(reg2, 16)) * 0.1
                 reg21 = modbus.get('reg21', '0000')
                 reg22 = modbus.get('reg22', '0000')
                 daily_energy = (int(reg22 + reg21, 16)) * 0.1
@@ -259,8 +259,8 @@ class InverterDataViewSet(ModelViewSet):
                 reg46 = modbus.get('reg46', '0000')
                 op_active_power = (int(reg46 + reg45, 16)) * 1
                 specific_yields = 0
-                if normal_power != 0:
-                    specific_yields = daily_energy / normal_power
+                if nominal_power != 0:
+                    specific_yields = daily_energy / nominal_power
                 inverter_op_active_power = int(reg46 + reg45, 16)
                 inverter_daily_energy = int(reg22 + reg21, 16)
                 inverter_total_energy = int(reg24 + reg23, 16)
@@ -272,7 +272,7 @@ class InverterDataViewSet(ModelViewSet):
         InverterData.objects.create(device=device, imei=imei, sid=sid, uid=uid, rcnt=rcnt, daily_energy=daily_energy,
                                     total_energy=total_energy, op_active_power=op_active_power,
                                     specific_yields=specific_yields, inverter_op_active_power=inverter_op_active_power,
-                                    inverter_daily_energy=inverter_daily_energy, normal_power=normal_power,
+                                    inverter_daily_energy=inverter_daily_energy, nominal_power=nominal_power,
                                     inverter_total_energy=inverter_total_energy, meter_active_power=meter_active_power)
         return response.Ok({"detail": "Data stored successfully!"})
 
