@@ -247,14 +247,33 @@ class InverterDataViewSet(ModelViewSet):
                 alarm_ops_state = operation_state_check(reg39)
                 reg46 = int(modbus.get('reg46', '0000'), 16)
                 alarm_name = alarm_name_check(reg46)
-                alarm_year = int(modbus.get('reg40', '0000'), 16)
-                alarm_month = int(modbus.get('reg41', '0000'), 16)
-                alarm_date = int(modbus.get('reg42', '0000'), 16)
-                alarm_hr = int(modbus.get('reg43', '0000'), 16)
-                alarm_min = int(modbus.get('reg44', '0000'), 16)
-                alarm_sec = int(modbus.get('reg45', '0000'), 16)
-                alarm_date = str(alarm_year) + "/" + str(alarm_month) + "/" + str(alarm_date) + ", " + str(alarm_hr) \
-                             + ":" + str(alarm_min) + ":" + str(alarm_sec)
+                alarm_date = ""
+                reg40 = modbus.get('reg40', None)
+                if reg40:
+                    alarm_year = int(reg40, 16)
+                    alarm_date += str(alarm_year) + "/"
+                reg41 = modbus.get('reg41', None)
+                if reg41:
+                    alarm_month = int(reg41, 16)
+                    alarm_date += str(alarm_month) + "/"
+                reg42 = modbus.get('reg42', None)
+                if reg42:
+                    alarm_day = int(reg42, 16)
+                    alarm_date += str(alarm_day) + ", "
+                reg43 = modbus.get('reg43', None)
+                if reg43:
+                    alarm_hr = int(reg43, 16)
+                    alarm_date += str(alarm_hr) + ":"
+                reg44 = modbus.get('reg44', None)
+                if reg44:
+                    alarm_min = int(reg44, 16)
+                    alarm_date += str(alarm_min) + ":"
+                reg45 = modbus.get('reg45', None)
+                if reg45:
+                    alarm_sec = int(reg45, 16)
+                    alarm_date += str(alarm_sec)
+                if len(alarm_date) == 0:
+                    alarm_date = None
         elif device.location.inverter_type == INVERTER_TYPE_ABB:
             if modbus:
                 modbus = modbus[0]
@@ -286,12 +305,33 @@ class InverterDataViewSet(ModelViewSet):
                 alarm_name = alarm_name_check(reg46)
                 alarm_year = int(modbus.get('reg40', '0000'), 16)
                 alarm_month = int(modbus.get('reg41', '0000'), 16)
-                alarm_date = int(modbus.get('reg42', '0000'), 16)
-                alarm_hr = int(modbus.get('reg43', '0000'), 16)
-                alarm_min = int(modbus.get('reg44', '0000'), 16)
-                alarm_sec = int(modbus.get('reg45', '0000'), 16)
-                alarm_date = str(alarm_year) + "/" + str(alarm_month) + "/" + str(alarm_date) + ", " + str(alarm_hr) \
-                             + ":" + str(alarm_min) + ":" + str(alarm_sec)
+                alarm_date = ""
+                reg40 = modbus.get('reg40', None)
+                if reg40:
+                    alarm_year = int(reg40, 16)
+                    alarm_date += str(alarm_year) + "/"
+                reg41 = modbus.get('reg41', None)
+                if reg41:
+                    alarm_month = int(reg41, 16)
+                    alarm_date += str(alarm_month) + "/"
+                reg42 = modbus.get('reg42', None)
+                if reg42:
+                    alarm_day = int(reg42, 16)
+                    alarm_date += str(alarm_day) + ", "
+                reg43 = modbus.get('reg43', None)
+                if reg43:
+                    alarm_hr = int(reg43, 16)
+                    alarm_date += str(alarm_hr) + ":"
+                reg44 = modbus.get('reg44', None)
+                if reg44:
+                    alarm_min = int(reg44, 16)
+                    alarm_date += str(alarm_min) + ":"
+                reg45 = modbus.get('reg45', None)
+                if reg45:
+                    alarm_sec = int(reg45, 16)
+                    alarm_date += str(alarm_sec)
+                if len(alarm_date) == 0:
+                    alarm_date = None
         else:
             return response.BadRequest({'detail': 'Invalid Inverter type!'})
         InverterData.objects.create(device=device, imei=imei, sid=sid, uid=uid, rcnt=rcnt, daily_energy=daily_energy,
