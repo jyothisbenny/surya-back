@@ -249,27 +249,27 @@ class InverterDataViewSet(ModelViewSet):
                 alarm_name = alarm_name_check(reg46)
                 alarm_date = ""
                 reg40 = modbus.get('reg40', None)
-                if reg40:
+                if reg40 is not None:
                     alarm_year = int(reg40, 16)
                     alarm_date += str(alarm_year) + "/"
                 reg41 = modbus.get('reg41', None)
-                if reg41:
+                if reg41 is not None:
                     alarm_month = int(reg41, 16)
                     alarm_date += str(alarm_month) + "/"
                 reg42 = modbus.get('reg42', None)
-                if reg42:
+                if reg42 is not None:
                     alarm_day = int(reg42, 16)
                     alarm_date += str(alarm_day) + ", "
                 reg43 = modbus.get('reg43', None)
-                if reg43:
+                if reg43 is not None:
                     alarm_hr = int(reg43, 16)
                     alarm_date += str(alarm_hr) + ":"
                 reg44 = modbus.get('reg44', None)
-                if reg44:
+                if reg44 is not None:
                     alarm_min = int(reg44, 16)
                     alarm_date += str(alarm_min) + ":"
                 reg45 = modbus.get('reg45', None)
-                if reg45:
+                if reg45 is not None:
                     alarm_sec = int(reg45, 16)
                     alarm_date += str(alarm_sec)
                 if len(alarm_date) == 0:
@@ -307,27 +307,27 @@ class InverterDataViewSet(ModelViewSet):
                 alarm_month = int(modbus.get('reg41', '0000'), 16)
                 alarm_date = ""
                 reg40 = modbus.get('reg40', None)
-                if reg40:
+                if reg40 is not None:
                     alarm_year = int(reg40, 16)
                     alarm_date += str(alarm_year) + "/"
                 reg41 = modbus.get('reg41', None)
-                if reg41:
+                if reg41 is not None:
                     alarm_month = int(reg41, 16)
                     alarm_date += str(alarm_month) + "/"
                 reg42 = modbus.get('reg42', None)
-                if reg42:
+                if reg42 is not None:
                     alarm_day = int(reg42, 16)
                     alarm_date += str(alarm_day) + ", "
                 reg43 = modbus.get('reg43', None)
-                if reg43:
+                if reg43 is not None:
                     alarm_hr = int(reg43, 16)
                     alarm_date += str(alarm_hr) + ":"
                 reg44 = modbus.get('reg44', None)
-                if reg44:
+                if reg44 is not None:
                     alarm_min = int(reg44, 16)
                     alarm_date += str(alarm_min) + ":"
                 reg45 = modbus.get('reg45', None)
-                if reg45:
+                if reg45 is not None:
                     alarm_sec = int(reg45, 16)
                     alarm_date += str(alarm_sec)
                 if len(alarm_date) == 0:

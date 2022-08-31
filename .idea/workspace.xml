@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e444002e-0434-404f-ad6f-bd971a15d4bf" name="Changes" comment="reports updated with new calculations">
+    <list default="true" id="e444002e-0434-404f-ad6f-bd971a15d4bf" name="Changes" comment="alarm added">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/adminapp/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/adminapp/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/adminapp/viewsets.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,104 +98,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1650019535656</updated>
-    </task>
-    <task id="LOCAL-00005" summary="added location_devices api">
-      <created>1652641097254</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1652641097254</updated>
-    </task>
-    <task id="LOCAL-00006" summary="added location_devices api">
-      <created>1652735463494</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1652735463494</updated>
-    </task>
-    <task id="LOCAL-00007" summary="added location_devices api">
-      <created>1652735473648</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1652735473648</updated>
-    </task>
-    <task id="LOCAL-00008" summary="filter added for location search">
-      <created>1652936827879</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1652936827879</updated>
-    </task>
-    <task id="LOCAL-00009" summary="added inverter api for getting data from device">
-      <created>1653287322562</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1653287322562</updated>
-    </task>
-    <task id="LOCAL-00010" summary="added inverter api for getting data from device">
-      <created>1653287333574</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1653287333574</updated>
-    </task>
-    <task id="LOCAL-00011" summary="added inverter api for getting data from device">
-      <created>1653386184470</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1653386184470</updated>
-    </task>
-    <task id="LOCAL-00012" summary="added inverter api for getting data from device">
-      <created>1653386198967</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1653386198967</updated>
-    </task>
-    <task id="LOCAL-00013" summary="generated location data and device data">
-      <created>1653749686300</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1653749686300</updated>
-    </task>
-    <task id="LOCAL-00014" summary="reports generated">
-      <created>1654103575953</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1654103575953</updated>
-    </task>
-    <task id="LOCAL-00015" summary="updated requirements">
-      <created>1654103657247</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1654103657247</updated>
-    </task>
-    <task id="LOCAL-00016" summary="updated xlsx errors">
-      <created>1654161535968</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1654161535968</updated>
-    </task>
-    <task id="LOCAL-00017" summary="updated xlsx errors">
-      <created>1654167271123</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1654167271123</updated>
-    </task>
-    <task id="LOCAL-00018" summary="etoday bug fixed">
-      <created>1656047197313</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1656047197313</updated>
     </task>
     <task id="LOCAL-00019" summary="updated inverter api">
       <created>1658467063634</created>
@@ -442,7 +344,105 @@
       <option name="project" value="LOCAL" />
       <updated>1661696409084</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="reports updated with new calculations">
+      <created>1661698025845</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1661698025845</updated>
+    </task>
+    <task id="LOCAL-00055" summary="updated with new calculations">
+      <created>1661698237234</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1661698237234</updated>
+    </task>
+    <task id="LOCAL-00056" summary="reports bug fixed">
+      <created>1661779465673</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1661779465673</updated>
+    </task>
+    <task id="LOCAL-00057" summary="reports bug fixed">
+      <created>1661779757632</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1661779757632</updated>
+    </task>
+    <task id="LOCAL-00058" summary="reports bug fixed">
+      <created>1661783185021</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1661783185021</updated>
+    </task>
+    <task id="LOCAL-00059" summary="reports bug fixed">
+      <created>1661783327049</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1661783327049</updated>
+    </task>
+    <task id="LOCAL-00060" summary="reports bug fixed">
+      <created>1661784310632</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1661784310632</updated>
+    </task>
+    <task id="LOCAL-00061" summary="reports bug fixed">
+      <created>1661784713774</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1661784713774</updated>
+    </task>
+    <task id="LOCAL-00062" summary="logic of total energy b/w two dates changed">
+      <created>1661785607896</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1661785607896</updated>
+    </task>
+    <task id="LOCAL-00063" summary="added localtime for graphs">
+      <created>1661787246104</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1661787246104</updated>
+    </task>
+    <task id="LOCAL-00064" summary="added localtime for graphs">
+      <created>1661911882823</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1661911882823</updated>
+    </task>
+    <task id="LOCAL-00065" summary="nominal power mistake fixed and added alarm fields to model">
+      <created>1661924736556</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1661924736556</updated>
+    </task>
+    <task id="LOCAL-00066" summary="alarm added">
+      <created>1661967029880</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1661967029880</updated>
+    </task>
+    <task id="LOCAL-00067" summary="alarm added">
+      <created>1661968304027</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1661968304027</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -457,12 +457,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="generated location data and device data" />
-    <MESSAGE value="reports generated" />
-    <MESSAGE value="updated requirements" />
-    <MESSAGE value="updated xlsx errors" />
-    <MESSAGE value="etoday bug fixed" />
-    <MESSAGE value="updated inverter api" />
     <MESSAGE value="changed data to json" />
     <MESSAGE value="added offline status to locations" />
     <MESSAGE value="added celery" />
@@ -482,6 +476,12 @@
     <MESSAGE value="oap vs time graph" />
     <MESSAGE value="updated cuf, pr, solar irradiation, specific yields" />
     <MESSAGE value="reports updated with new calculations" />
-    <option name="LAST_COMMIT_MESSAGE" value="reports updated with new calculations" />
+    <MESSAGE value="updated with new calculations" />
+    <MESSAGE value="reports bug fixed" />
+    <MESSAGE value="logic of total energy b/w two dates changed" />
+    <MESSAGE value="added localtime for graphs" />
+    <MESSAGE value="nominal power mistake fixed and added alarm fields to model" />
+    <MESSAGE value="alarm added" />
+    <option name="LAST_COMMIT_MESSAGE" value="alarm added" />
   </component>
 </project>
