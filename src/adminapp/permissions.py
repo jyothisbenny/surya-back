@@ -11,7 +11,7 @@ class LocationPermissions(ResourcePermission):
     create_with_base64_perms = AllowAny()
     multiple_perms = AllowAny()
     location_list_perms = AdminPerm() | UserPerm()
-    get_location_count_perms = AdminPerm() |UserPerm()
+    account_overview_perms = AdminPerm() |UserPerm()
     user_locations_perms = AdminPerm() | UserPerm()
     de_vs_time_perms = AdminPerm() | UserPerm()
     oap_vs_time_perms = AdminPerm() | UserPerm()

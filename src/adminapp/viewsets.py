@@ -54,10 +54,27 @@ class LocationViewSet(ModelViewSet):
         return response.Ok(LocationSerializer(queryset, many=True).data)
 
     @action(methods=['GET'], detail=False, pagination_class=StandardResultsSetPagination)
-    def get_location_count(self, request):
-        queryset = Location.objects.filter(is_active=True).count()
-        print("count", queryset)
-        return response.Ok(queryset)
+    def account_overview(self, request):
+        queryset = Location.objects.filter(user__id=request.user.pk, is_active=True)
+        location_count = queryset.count()
+        all_devices = Device.objects.filter(location__user__id=request.user.pk, is_active=True)
+        device_count = all_devices.count()
+        capacity = 0
+        for record in queryset.iterator():
+            try:
+                capacity += int(record.capacity)
+            except:
+                pass
+        inverter_count = all_devices.count()
+        etotal = 0
+        for record in all_devices.iterator():
+            inverter_data = InverterData.objects.filter(device=record).order_by('-created_at').first()
+            if inverter_data and inverter_data.total_energy:
+                etotal += int(inverter_data.total_energy)
+        co2_saved = etotal * 0.8
+        context = {"location_count": location_count, "device_count": device_count, "capacity": capacity,
+                   "inverter_count": inverter_count, "co2_saved": co2_saved}
+        return response.Ok(context)
 
     @action(methods=['GET'], detail=False, pagination_class=StandardResultsSetPagination)
     def user_locations(self, request):
