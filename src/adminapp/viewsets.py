@@ -57,7 +57,8 @@ class LocationViewSet(ModelViewSet):
     def account_overview(self, request):
         queryset = Location.objects.filter(user__id=request.user.pk, is_active=True)
         location_count = queryset.count()
-        all_devices = Device.objects.filter(location__user__id=request.user.pk, is_active=True)
+        all_devices = Device.objects.filter(location__user__id=request.user.pk, location__is_active=True,
+                                            is_active=True)
         device_count = all_devices.count()
         capacity = 0
         for record in queryset.iterator():
