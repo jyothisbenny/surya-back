@@ -63,7 +63,7 @@ def generate_zip(extra_key=None, location_list=None, report_id=None, from_date=N
                     ['Plant Name', location.name],
                     ['Date', from_date,
                      to_date],
-                    ['Description'],
+                    ['Description',location.address ],
                     ['Plant Capacity', location.capacity, "kWp"],
                     ['Plant Manager', location.manager],
                     ['Manager Phone', location.phone],
